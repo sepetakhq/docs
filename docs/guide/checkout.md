@@ -1,26 +1,26 @@
 ---
 title: Checkout in five calls
-description: Prices are computed server-side; the buyer confirms with a one-time code; track_token is returned once.
+description: The server prices the cart; the buyer confirms with a one-time code; you receive track_token once.
 sidebar_position: 3
 ---
 
 # Checkout in five calls
 
-Prices are computed server-side; the cart sends only `product_id` and `qty`. The buyer confirms their contact with a one-time code on every order.
+The server prices the cart; your site sends `product_id` and `qty`, nothing more. The buyer confirms their contact with a one-time code on every order.
 
-| Call                                                             | Returns                             |
-| ---------------------------------------------------------------- | ----------------------------------- |
-| `POST /shipping/rates` — quotes for cart + destination           | `shipping_quote_id`                 |
-| `POST /checkout/draft` — cart becomes a priced draft             | `draft_id`, `total`, `otp_required` |
-| `POST /checkout/otp/send` — code to the buyer's email / WhatsApp | `expires_at`                        |
-| `POST /checkout/otp/verify` — code right, order placed           | `order`, `payment`, `track_token`   |
-| `GET /orders/track/{token}` — status and payment instructions    | `order.timeline`, `payment`         |
+| Call                        | Does                                          | Returns                             |
+| --------------------------- | --------------------------------------------- | ----------------------------------- |
+| `POST /shipping/rates`      | quotes for the cart and the destination       | `shipping_quote_id`                 |
+| `POST /checkout/draft`      | turns the cart into a priced draft            | `draft_id`, `total`, `otp_required` |
+| `POST /checkout/otp/send`   | sends a code to the buyer's email or WhatsApp | `expires_at`                        |
+| `POST /checkout/otp/verify` | checks the code and places the order          | `order`, `payment`, `track_token`   |
+| `GET /orders/track/{token}` | status and payment instructions               | `order.timeline`, `payment`         |
 
-Field-level shapes for each call are in the [API reference](/api).
+The [API reference](/api) has the fields of every call.
 
 ## Rules the server enforces
 
-- `track_token` is returned **once**. Keep it.
-- Render `order.timeline` and `order.status_label` as given; status can move from the merchant's side at any time.
-- Branch on `payment.kind`, never `payment.method`: which gateway fulfils a method is the server's decision.
-- Never send a code automatically, and never guess why one was refused.
+- You receive `track_token` once. Keep it.
+- Render `order.timeline` and `order.status_label` as given; the merchant or a gateway can move the status at any time.
+- Branch on `payment.kind`. The server decides which gateway fulfils a method, so `payment.method` can change under you.
+- Send a code when the buyer asks for one, and show a refused code as refused; the server does not say why.

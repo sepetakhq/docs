@@ -16,6 +16,6 @@ const res = await fetch(`${BASE}/products?limit=12`, {
 const {products} = await res.json();
 ```
 
-Pin `X-API-Version` to the date you wrote against. That shape never changes. Without the header you get the baseline (`2026-09-05`). See [Versions](/guide/versions).
+Pin `X-API-Version` to the date you wrote against; that shape stays fixed. Without the header you get the baseline, `2026-09-05`. See [Versions](/guide/versions).
 
-For a JavaScript site, the client our templates use ships as [`@sepetakhq/storefront-kit`](https://www.npmjs.com/package/@sepetakhq/storefront-kit): `configureApi({ baseUrl })`, then one function per endpoint with one error type.
+For a JavaScript site, the client our templates use ships as [`@sepetakhq/storefront-kit`](https://www.npmjs.com/package/@sepetakhq/storefront-kit): call `configureApi({ baseUrl })`, then each endpoint is one function with one error type.
