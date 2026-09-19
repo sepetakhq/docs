@@ -1,0 +1,6 @@
+build
+.docusaurus
+node_modules
+docs/changelog.md
+specs
+package-lock.json

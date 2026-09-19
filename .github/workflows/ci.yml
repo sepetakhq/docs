@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+
+      # The audit trail: specs/ must equal what sepetak.com serves, and the
+      # generated pages must equal what specs/ produce. Either drifting is a
+      # failed build, never a silently stale site.
+      - name: specs match the live API
+        run: npm run spec:check
+      - name: changelog is committed
+        run: |
+          npm run generate
+          git diff --exit-code -- docs/changelog.md || {
+            echo "::error::docs/changelog.md is stale. Run 'npm run generate' and commit."; exit 1; }
+
+      - run: npm test
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run build
+      - name: machine-readable outputs exist
+        run: test -s build/llms.txt && test -s build/llms-full.txt && test -s build/api/reference.md && test -s build/guide/checkout.md

@@ -1,0 +1,3387 @@
+{
+  "components": {
+    "schemas": {
+      "Error": {
+        "properties": {
+          "error": {
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "details": {
+                "properties": {
+                  "x": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "message": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "ErrorDestinationUnserved": {
+        "properties": {
+          "error": {
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "details": {
+                "properties": {
+                  "alternatives": {
+                    "items": {
+                      "properties": {
+                        "city": {
+                          "type": "string"
+                        },
+                        "district": {
+                          "type": "string"
+                        },
+                        "label": {
+                          "type": "string"
+                        },
+                        "province": {
+                          "type": "string"
+                        },
+                        "ref": {
+                          "type": "string"
+                        },
+                        "subdistrict": {
+                          "type": "string"
+                        },
+                        "zip_code": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "type": "array"
+                  }
+                },
+                "type": "object"
+              },
+              "message": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "description": "The storefront API. The shop is the request's Host. Every field may be null; the schema shows each field's type when present. Errors are {error:{code,message,details}}. Send X-API-Version to pin the shape you were written against.",
+    "title": "Sepetak storefront API",
+    "version": "2026-09-09",
+    "x-changes": [
+      "checkout draft requires a buyer phone"
+    ],
+    "x-versions": [
+      "2026-09-05",
+      "2026-09-09"
+    ]
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/categories": {
+      "get": {
+        "description": "Catalogue categories.",
+        "operationId": "getCategories",
+        "parameters": [
+          {
+            "description": "The API date this client was written against. Absent means the baseline.",
+            "in": "header",
+            "name": "X-API-Version",
+            "required": false,
+            "schema": {
+              "example": "2026-09-09",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "categories": {
+                      "items": {
+                        "properties": {
+                          "image": {
+                            "type": "string"
+                          },
+                          "image_srcset": {
+                            "type": "string"
+                          },
+                          "key": {
+                            "type": "string"
+                          },
+                          "label": {
+                            "type": "string"
+                          },
+                          "material_spec": {
+                            "type": "string"
+                          },
+                          "spec_label": {
+                            "type": "string"
+                          },
+                          "subtitle": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error envelope."
+          }
+        },
+        "summary": "List categories",
+        "tags": [
+          "Catalogue"
+        ]
+      }
+    },
+    "/checkout/draft": {
+      "post": {
+        "description": "Price a cart server-side. Returns whether an OTP is required.",
+        "operationId": "postCheckoutDraft",
+        "parameters": [
+          {
+            "description": "The API date this client was written against. Absent means the baseline.",
+            "in": "header",
+            "name": "X-API-Version",
+            "required": false,
+            "schema": {
+              "example": "2026-09-09",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "address": {
+                    "type": "string"
+                  },
+                  "city": {
+                    "type": "string"
+                  },
+                  "contact": {
+                    "type": "string"
+                  },
+                  "courier_code": {
+                    "type": "string"
+                  },
+                  "customer_name": {
+                    "type": "string"
+                  },
+                  "items": {
+                    "items": {
+                      "properties": {
+                        "product_id": {
+                          "type": "string"
+                        },
+                        "qty": {
+                          "type": "integer"
+                        },
+                        "variant_id": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "type": "array"
+                  },
+                  "payment_method": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "string"
+                  },
+                  "shipping_quote_id": {
+                    "type": "string"
+                  },
+                  "voucher_code": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "contact": {
+                      "properties": {
+                        "channel": {
+                          "type": "string"
+                        },
+                        "masked": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "discount_total": {
+                      "type": "integer"
+                    },
+                    "draft_id": {
+                      "type": "string"
+                    },
+                    "expires_at": {
+                      "format": "date-time",
+                      "type": "string"
+                    },
+                    "free_shipping": {
+                      "type": "boolean"
+                    },
+                    "lines": {
+                      "items": {
+                        "properties": {
+                          "image": {
+                            "type": "string"
+                          },
+                          "image_srcset": {
+                            "type": "string"
+                          },
+                          "line_total": {
+                            "type": "integer"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "preorder": {
+                            "type": "boolean"
+                          },
+                          "product_id": {
+                            "type": "string"
+                          },
+                          "promotion_name": {
+                            "type": "string"
+                          },
+                          "qty": {
+                            "type": "integer"
+                          },
+                          "sku": {
+                            "type": "string"
+                          },
+                          "undiscounted_unit_price": {
+                            "type": "integer"
+                          },
+                          "unit_price": {
+                            "type": "integer"
+                          },
+                          "unlimited_stock": {
+                            "type": "boolean"
+                          },
+                          "variant_id": {
+                            "type": "string"
+                          },
+                          "variant_label": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "otp_required": {
+                      "type": "boolean"
+                    },
+                    "payment_fee": {
+                      "type": "integer"
+                    },
+                    "preorder_lead_days": {
+                      "type": "integer"
+                    },
+                    "promotion_name": {
+                      "type": "string"
+                    },
+                    "shipping_cost": {
+                      "type": "integer"
+                    },
+                    "shipping_discount": {
+                      "type": "integer"
+                    },
+                    "shipping_promotion_name": {
+                      "type": "string"
+                    },
+                    "subtotal": {
+                      "type": "integer"
+                    },
+                    "total": {
+                      "type": "integer"
+                    },
+                    "unique_code": {
+                      "type": "integer"
+                    },
+                    "voucher": {
+                      "properties": {
+                        "amount": {
+                          "type": "integer"
+                        },
+                        "applied": {
+                          "type": "boolean"
+                        },
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "outbid": {
+                          "type": "integer"
+                        },
+                        "outbid_name": {
+                          "type": "string"
+                        },
+                        "reason": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error envelope."
+          }
+        },
+        "summary": "Create draft",
+        "tags": [
+          "Checkout"
+        ]
+      }
+    },
+    "/checkout/otp/send": {
+      "post": {
+        "description": "Send the buyer a verification code for a draft.",
+        "operationId": "postCheckoutOtpSend",
+        "parameters": [
+          {
+            "description": "The API date this client was written against. Absent means the baseline.",
+            "in": "header",
+            "name": "X-API-Version",
+            "required": false,
+            "schema": {
+              "example": "2026-09-09",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "draft_id": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "channel": {
+                      "type": "string"
+                    },
+                    "expires_in_seconds": {
+                      "type": "integer"
+                    },
+                    "masked": {
+                      "type": "string"
+                    },
+                    "sent": {
+                      "type": "boolean"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error envelope."
+          }
+        },
+        "summary": "Send code",
+        "tags": [
+          "Checkout"
+        ]
+      }
+    },
+    "/checkout/otp/verify": {
+      "post": {
+        "description": "Verify the code and place the order. track_token is returned once.",
+        "operationId": "postCheckoutOtpVerify",
+        "parameters": [
+          {
+            "description": "The API date this client was written against. Absent means the baseline.",
+            "in": "header",
+            "name": "X-API-Version",
+            "required": false,
+            "schema": {
+              "example": "2026-09-09",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  },
+                  "draft_id": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "order": {
+                      "properties": {
+                        "awb": {
+                          "type": "string"
+                        },
+                        "buyer_claimed_at": {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        "city": {
+                          "type": "string"
+                        },
+                        "contact_masked": {
+                          "type": "string"
+                        },
+                        "courier_code": {
+                          "type": "string"
+                        },
+                        "customer_name": {
+                          "type": "string"
+                        },
+                        "discount_total": {
+                          "type": "integer"
+                        },
+                        "expires_at": {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "lines": {
+                          "items": {
+                            "properties": {
+                              "image": {
+                                "type": "string"
+                              },
+                              "image_srcset": {
+                                "type": "string"
+                              },
+                              "line_total": {
+                                "type": "integer"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "preorder": {
+                                "type": "boolean"
+                              },
+                              "qty": {
+                                "type": "integer"
+                              },
+                              "sku": {
+                                "type": "string"
+                              },
+                              "undiscounted_unit_price": {
+                                "type": "integer"
+                              },
+                              "unit_price": {
+                                "type": "integer"
+                              },
+                              "unlimited_stock": {
+                                "type": "boolean"
+                              },
+                              "variant_label": {
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        "number": {
+                          "type": "string"
+                        },
+                        "payment_fee": {
+                          "type": "integer"
+                        },
+                        "payment_method": {
+                          "type": "string"
+                        },
+                        "placed_at": {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        "preorder_lead_days": {
+                          "type": "integer"
+                        },
+                        "preorder_ship_estimate": {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        "promotion_name": {
+                          "type": "string"
+                        },
+                        "shipping_cost": {
+                          "type": "integer"
+                        },
+                        "shipping_discount": {
+                          "type": "integer"
+                        },
+                        "shipping_promotion_name": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "status_label": {
+                          "type": "string"
+                        },
+                        "subtotal": {
+                          "type": "integer"
+                        },
+                        "timeline": {
+                          "items": {
+                            "properties": {
+                              "done": {
+                                "type": "boolean"
+                              },
+                              "key": {
+                                "type": "string"
+                              },
+                              "label": {
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        "total": {
+                          "type": "integer"
+                        },
+                        "unique_code": {
+                          "type": "integer"
+                        },
+                        "voucher_code": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "payment": {
+                      "properties": {
+                        "amount": {
+                          "type": "integer"
+                        },
+                        "expires_at": {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        "kind": {
+                          "type": "string"
+                        },
+                        "manual_account_holder": {
+                          "type": "string"
+                        },
+                        "manual_account_number": {
+                          "type": "string"
+                        },
+                        "manual_bank": {
+                          "type": "string"
+                        },
+                        "manual_qr_image_url": {
+                          "type": "string"
+                        },
+                        "manual_whatsapp_phone": {
+                          "type": "string"
+                        },
+                        "method": {
+                          "type": "string"
+                        },
+                        "qr_image_url": {
+                          "type": "string"
+                        },
+                        "qr_payload": {
+                          "type": "string"
+                        },
+                        "redirect_url": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "va_bank": {
+                          "type": "string"
+                        },
+                        "va_number": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "track_token": {
+                      "type": "string"
+                    },
+                    "track_url": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error envelope."
+          }
+        },
+        "summary": "Verify and place",
+        "tags": [
+          "Checkout"
+        ]
+      }
+    },
+    "/orders/lookup/otp/send": {
+      "post": {
+        "description": "Send a code to list a buyer's orders.",
+        "operationId": "postOrdersLookupOtpSend",
+        "parameters": [
+          {
+            "description": "The API date this client was written against. Absent means the baseline.",
+            "in": "header",
+            "name": "X-API-Version",
+            "required": false,
+            "schema": {
+              "example": "2026-09-09",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "contact": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "channel": {
+                      "type": "string"
+                    },
+                    "expires_in_seconds": {
+                      "type": "integer"
+                    },
+                    "masked": {
+                      "type": "string"
+                    },
+                    "sent": {
+                      "type": "boolean"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error envelope."
+          }
+        },
+        "summary": "Send lookup code",
+        "tags": [
+          "Orders"
+        ]
+      }
+    },
+    "/orders/lookup/otp/verify": {
+      "post": {
+        "description": "Verify the code and list the buyer's orders.",
+        "operationId": "postOrdersLookupOtpVerify",
+        "parameters": [
+          {
+            "description": "The API date this client was written against. Absent means the baseline.",
+            "in": "header",
+            "name": "X-API-Version",
+            "required": false,
+            "schema": {
+              "example": "2026-09-09",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  },
+                  "contact": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "orders": {
+                      "items": {
+                        "properties": {
+                          "awb": {
+                            "type": "string"
+                          },
+                          "buyer_claimed_at": {
+                            "format": "date-time",
+                            "type": "string"
+                          },
+                          "city": {
+                            "type": "string"
+                          },
+                          "contact_masked": {
+                            "type": "string"
+                          },
+                          "courier_code": {
+                            "type": "string"
+                          },
+                          "customer_name": {
+                            "type": "string"
+                          },
+                          "discount_total": {
+                            "type": "integer"
+                          },
+                          "expires_at": {
+                            "format": "date-time",
+                            "type": "string"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "lines": {
+                            "items": {
+                              "properties": {
+                                "image": {
+                                  "type": "string"
+                                },
+                                "image_srcset": {
+                                  "type": "string"
+                                },
+                                "line_total": {
+                                  "type": "integer"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "preorder": {
+                                  "type": "boolean"
+                                },
+                                "qty": {
+                                  "type": "integer"
+                                },
+                                "sku": {
+                                  "type": "string"
+                                },
+                                "undiscounted_unit_price": {
+                                  "type": "integer"
+                                },
+                                "unit_price": {
+                                  "type": "integer"
+                                },
+                                "unlimited_stock": {
+                                  "type": "boolean"
+                                },
+                                "variant_label": {
+                                  "type": "string"
+                                }
+                              },
+                              "type": "object"
+                            },
+                            "type": "array"
+                          },
+                          "number": {
+                            "type": "string"
+                          },
+                          "payment_fee": {
+                            "type": "integer"
+                          },
+                          "payment_method": {
+                            "type": "string"
+                          },
+                          "placed_at": {
+                            "format": "date-time",
+                            "type": "string"
+                          },
+                          "preorder_lead_days": {
+                            "type": "integer"
+                          },
+                          "preorder_ship_estimate": {
+                            "format": "date-time",
+                            "type": "string"
+                          },
+                          "promotion_name": {
+                            "type": "string"
+                          },
+                          "shipping_cost": {
+                            "type": "integer"
+                          },
+                          "shipping_discount": {
+                            "type": "integer"
+                          },
+                          "shipping_promotion_name": {
+                            "type": "string"
+                          },
+                          "status": {
+                            "type": "string"
+                          },
+                          "status_label": {
+                            "type": "string"
+                          },
+                          "subtotal": {
+                            "type": "integer"
+                          },
+                          "timeline": {
+                            "items": {
+                              "properties": {
+                                "done": {
+                                  "type": "boolean"
+                                },
+                                "key": {
+                                  "type": "string"
+                                },
+                                "label": {
+                                  "type": "string"
+                                }
+                              },
+                              "type": "object"
+                            },
+                            "type": "array"
+                          },
+                          "total": {
+                            "type": "integer"
+                          },
+                          "unique_code": {
+                            "type": "integer"
+                          },
+                          "voucher_code": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error envelope."
+          }
+        },
+        "summary": "List buyer's orders",
+        "tags": [
+          "Orders"
+        ]
+      }
+    },
+    "/orders/track/{token}": {
+      "get": {
+        "description": "An order and its payment, by the buyer's tracking token.",
+        "operationId": "getOrdersTrackByToken",
+        "parameters": [
+          {
+            "description": "The API date this client was written against. Absent means the baseline.",
+            "in": "header",
+            "name": "X-API-Version",
+            "required": false,
+            "schema": {
+              "example": "2026-09-09",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "order": {
+                      "properties": {
+                        "awb": {
+                          "type": "string"
+                        },
+                        "buyer_claimed_at": {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        "city": {
+                          "type": "string"
+                        },
+                        "contact_masked": {
+                          "type": "string"
+                        },
+                        "courier_code": {
+                          "type": "string"
+                        },
+                        "customer_name": {
+                          "type": "string"
+                        },
+                        "discount_total": {
+                          "type": "integer"
+                        },
+                        "expires_at": {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "lines": {
+                          "items": {
+                            "properties": {
+                              "image": {
+                                "type": "string"
+                              },
+                              "image_srcset": {
+                                "type": "string"
+                              },
+                              "line_total": {
+                                "type": "integer"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "preorder": {
+                                "type": "boolean"
+                              },
+                              "qty": {
+                                "type": "integer"
+                              },
+                              "sku": {
+                                "type": "string"
+                              },
+                              "undiscounted_unit_price": {
+                                "type": "integer"
+                              },
+                              "unit_price": {
+                                "type": "integer"
+                              },
+                              "unlimited_stock": {
+                                "type": "boolean"
+                              },
+                              "variant_label": {
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        "number": {
+                          "type": "string"
+                        },
+                        "payment_fee": {
+                          "type": "integer"
+                        },
+                        "payment_method": {
+                          "type": "string"
+                        },
+                        "placed_at": {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        "preorder_lead_days": {
+                          "type": "integer"
+                        },
+                        "preorder_ship_estimate": {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        "promotion_name": {
+                          "type": "string"
+                        },
+                        "shipping_cost": {
+                          "type": "integer"
+                        },
+                        "shipping_discount": {
+                          "type": "integer"
+                        },
+                        "shipping_promotion_name": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "status_label": {
+                          "type": "string"
+                        },
+                        "subtotal": {
+                          "type": "integer"
+                        },
+                        "timeline": {
+                          "items": {
+                            "properties": {
+                              "done": {
+                                "type": "boolean"
+                              },
+                              "key": {
+                                "type": "string"
+                              },
+                              "label": {
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        "total": {
+                          "type": "integer"
+                        },
+                        "unique_code": {
+                          "type": "integer"
+                        },
+                        "voucher_code": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "payment": {
+                      "properties": {
+                        "amount": {
+                          "type": "integer"
+                        },
+                        "expires_at": {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        "kind": {
+                          "type": "string"
+                        },
+                        "manual_account_holder": {
+                          "type": "string"
+                        },
+                        "manual_account_number": {
+                          "type": "string"
+                        },
+                        "manual_bank": {
+                          "type": "string"
+                        },
+                        "manual_qr_image_url": {
+                          "type": "string"
+                        },
+                        "manual_whatsapp_phone": {
+                          "type": "string"
+                        },
+                        "method": {
+                          "type": "string"
+                        },
+                        "qr_image_url": {
+                          "type": "string"
+                        },
+                        "qr_payload": {
+                          "type": "string"
+                        },
+                        "redirect_url": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "va_bank": {
+                          "type": "string"
+                        },
+                        "va_number": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error envelope."
+          }
+        },
+        "summary": "Track order",
+        "tags": [
+          "Orders"
+        ]
+      }
+    },
+    "/orders/track/{token}/payment": {
+      "post": {
+        "description": "Re-open payment for an order whose instructions expired.",
+        "operationId": "postOrdersTrackByTokenPayment",
+        "parameters": [
+          {
+            "description": "The API date this client was written against. Absent means the baseline.",
+            "in": "header",
+            "name": "X-API-Version",
+            "required": false,
+            "schema": {
+              "example": "2026-09-09",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "payment": {
+                      "properties": {
+                        "amount": {
+                          "type": "integer"
+                        },
+                        "expires_at": {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        "kind": {
+                          "type": "string"
+                        },
+                        "manual_account_holder": {
+                          "type": "string"
+                        },
+                        "manual_account_number": {
+                          "type": "string"
+                        },
+                        "manual_bank": {
+                          "type": "string"
+                        },
+                        "manual_qr_image_url": {
+                          "type": "string"
+                        },
+                        "manual_whatsapp_phone": {
+                          "type": "string"
+                        },
+                        "method": {
+                          "type": "string"
+                        },
+                        "qr_image_url": {
+                          "type": "string"
+                        },
+                        "qr_payload": {
+                          "type": "string"
+                        },
+                        "redirect_url": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "va_bank": {
+                          "type": "string"
+                        },
+                        "va_number": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error envelope."
+          }
+        },
+        "summary": "Re-open payment",
+        "tags": [
+          "Orders"
+        ]
+      }
+    },
+    "/orders/track/{token}/payment/claim": {
+      "post": {
+        "description": "The buyer reports a manual transfer as paid.",
+        "operationId": "postOrdersTrackByTokenPaymentClaim",
+        "parameters": [
+          {
+            "description": "The API date this client was written against. Absent means the baseline.",
+            "in": "header",
+            "name": "X-API-Version",
+            "required": false,
+            "schema": {
+              "example": "2026-09-09",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "order": {
+                      "properties": {
+                        "awb": {
+                          "type": "string"
+                        },
+                        "buyer_claimed_at": {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        "city": {
+                          "type": "string"
+                        },
+                        "contact_masked": {
+                          "type": "string"
+                        },
+                        "courier_code": {
+                          "type": "string"
+                        },
+                        "customer_name": {
+                          "type": "string"
+                        },
+                        "discount_total": {
+                          "type": "integer"
+                        },
+                        "expires_at": {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "lines": {
+                          "items": {
+                            "properties": {
+                              "image": {
+                                "type": "string"
+                              },
+                              "image_srcset": {
+                                "type": "string"
+                              },
+                              "line_total": {
+                                "type": "integer"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "preorder": {
+                                "type": "boolean"
+                              },
+                              "qty": {
+                                "type": "integer"
+                              },
+                              "sku": {
+                                "type": "string"
+                              },
+                              "undiscounted_unit_price": {
+                                "type": "integer"
+                              },
+                              "unit_price": {
+                                "type": "integer"
+                              },
+                              "unlimited_stock": {
+                                "type": "boolean"
+                              },
+                              "variant_label": {
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        "number": {
+                          "type": "string"
+                        },
+                        "payment_fee": {
+                          "type": "integer"
+                        },
+                        "payment_method": {
+                          "type": "string"
+                        },
+                        "placed_at": {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        "preorder_lead_days": {
+                          "type": "integer"
+                        },
+                        "preorder_ship_estimate": {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        "promotion_name": {
+                          "type": "string"
+                        },
+                        "shipping_cost": {
+                          "type": "integer"
+                        },
+                        "shipping_discount": {
+                          "type": "integer"
+                        },
+                        "shipping_promotion_name": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "status_label": {
+                          "type": "string"
+                        },
+                        "subtotal": {
+                          "type": "integer"
+                        },
+                        "timeline": {
+                          "items": {
+                            "properties": {
+                              "done": {
+                                "type": "boolean"
+                              },
+                              "key": {
+                                "type": "string"
+                              },
+                              "label": {
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        "total": {
+                          "type": "integer"
+                        },
+                        "unique_code": {
+                          "type": "integer"
+                        },
+                        "voucher_code": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "payment": {
+                      "properties": {
+                        "amount": {
+                          "type": "integer"
+                        },
+                        "expires_at": {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        "kind": {
+                          "type": "string"
+                        },
+                        "manual_account_holder": {
+                          "type": "string"
+                        },
+                        "manual_account_number": {
+                          "type": "string"
+                        },
+                        "manual_bank": {
+                          "type": "string"
+                        },
+                        "manual_qr_image_url": {
+                          "type": "string"
+                        },
+                        "manual_whatsapp_phone": {
+                          "type": "string"
+                        },
+                        "method": {
+                          "type": "string"
+                        },
+                        "qr_image_url": {
+                          "type": "string"
+                        },
+                        "qr_payload": {
+                          "type": "string"
+                        },
+                        "redirect_url": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "va_bank": {
+                          "type": "string"
+                        },
+                        "va_number": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error envelope."
+          }
+        },
+        "summary": "Claim manual payment",
+        "tags": [
+          "Orders"
+        ]
+      }
+    },
+    "/products": {
+      "get": {
+        "description": "Catalogue listing; filter by cat, tag, sort, limit, offset.",
+        "operationId": "getProducts",
+        "parameters": [
+          {
+            "description": "The API date this client was written against. Absent means the baseline.",
+            "in": "header",
+            "name": "X-API-Version",
+            "required": false,
+            "schema": {
+              "example": "2026-09-09",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "limit": {
+                      "type": "integer"
+                    },
+                    "offset": {
+                      "type": "integer"
+                    },
+                    "products": {
+                      "items": {
+                        "properties": {
+                          "availability": {
+                            "type": "string"
+                          },
+                          "badge": {
+                            "type": "string"
+                          },
+                          "category_key": {
+                            "type": "string"
+                          },
+                          "category_label": {
+                            "type": "string"
+                          },
+                          "compare_at_price": {
+                            "type": "integer"
+                          },
+                          "has_variants": {
+                            "type": "boolean"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "image": {
+                            "type": "string"
+                          },
+                          "image_height": {
+                            "type": "integer"
+                          },
+                          "image_srcset": {
+                            "type": "string"
+                          },
+                          "image_width": {
+                            "type": "integer"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "on_sale": {
+                            "type": "boolean"
+                          },
+                          "preorder": {
+                            "type": "boolean"
+                          },
+                          "preorder_lead_days": {
+                            "type": "integer"
+                          },
+                          "price": {
+                            "type": "integer"
+                          },
+                          "price_max": {
+                            "type": "integer"
+                          },
+                          "sell_from": {
+                            "format": "date-time",
+                            "type": "string"
+                          },
+                          "sell_until": {
+                            "format": "date-time",
+                            "type": "string"
+                          },
+                          "slug": {
+                            "type": "string"
+                          },
+                          "sold_out": {
+                            "type": "boolean"
+                          },
+                          "stock": {
+                            "type": "integer"
+                          },
+                          "unlimited_stock": {
+                            "type": "boolean"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error envelope."
+          }
+        },
+        "summary": "List products",
+        "tags": [
+          "Catalogue"
+        ]
+      }
+    },
+    "/products/{slug}": {
+      "get": {
+        "description": "One product with its variants and images.",
+        "operationId": "getProductsBySlug",
+        "parameters": [
+          {
+            "description": "The API date this client was written against. Absent means the baseline.",
+            "in": "header",
+            "name": "X-API-Version",
+            "required": false,
+            "schema": {
+              "example": "2026-09-09",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "availability": {
+                      "type": "string"
+                    },
+                    "badge": {
+                      "type": "string"
+                    },
+                    "care_copy": {
+                      "type": "string"
+                    },
+                    "category_key": {
+                      "type": "string"
+                    },
+                    "category_label": {
+                      "type": "string"
+                    },
+                    "compare_at_price": {
+                      "type": "integer"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "has_variants": {
+                      "type": "boolean"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "image": {
+                      "type": "string"
+                    },
+                    "image_height": {
+                      "type": "integer"
+                    },
+                    "image_srcset": {
+                      "type": "string"
+                    },
+                    "image_width": {
+                      "type": "integer"
+                    },
+                    "images": {
+                      "items": {
+                        "properties": {
+                          "alt": {
+                            "type": "string"
+                          },
+                          "height": {
+                            "type": "integer"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "srcset": {
+                            "type": "string"
+                          },
+                          "url": {
+                            "type": "string"
+                          },
+                          "width": {
+                            "type": "integer"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "material_spec": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "on_sale": {
+                      "type": "boolean"
+                    },
+                    "options": {
+                      "items": {
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "values": {
+                            "items": {
+                              "type": "string"
+                            },
+                            "type": "array"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "preorder": {
+                      "type": "boolean"
+                    },
+                    "preorder_lead_days": {
+                      "type": "integer"
+                    },
+                    "price": {
+                      "type": "integer"
+                    },
+                    "price_max": {
+                      "type": "integer"
+                    },
+                    "related": {
+                      "items": {
+                        "properties": {
+                          "availability": {
+                            "type": "string"
+                          },
+                          "badge": {
+                            "type": "string"
+                          },
+                          "category_key": {
+                            "type": "string"
+                          },
+                          "category_label": {
+                            "type": "string"
+                          },
+                          "compare_at_price": {
+                            "type": "integer"
+                          },
+                          "has_variants": {
+                            "type": "boolean"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "image": {
+                            "type": "string"
+                          },
+                          "image_height": {
+                            "type": "integer"
+                          },
+                          "image_srcset": {
+                            "type": "string"
+                          },
+                          "image_width": {
+                            "type": "integer"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "on_sale": {
+                            "type": "boolean"
+                          },
+                          "preorder": {
+                            "type": "boolean"
+                          },
+                          "preorder_lead_days": {
+                            "type": "integer"
+                          },
+                          "price": {
+                            "type": "integer"
+                          },
+                          "price_max": {
+                            "type": "integer"
+                          },
+                          "sell_from": {
+                            "format": "date-time",
+                            "type": "string"
+                          },
+                          "sell_until": {
+                            "format": "date-time",
+                            "type": "string"
+                          },
+                          "slug": {
+                            "type": "string"
+                          },
+                          "sold_out": {
+                            "type": "boolean"
+                          },
+                          "stock": {
+                            "type": "integer"
+                          },
+                          "unlimited_stock": {
+                            "type": "boolean"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "sell_from": {
+                      "format": "date-time",
+                      "type": "string"
+                    },
+                    "sell_until": {
+                      "format": "date-time",
+                      "type": "string"
+                    },
+                    "slug": {
+                      "type": "string"
+                    },
+                    "sold_out": {
+                      "type": "boolean"
+                    },
+                    "spec_label": {
+                      "type": "string"
+                    },
+                    "stock": {
+                      "type": "integer"
+                    },
+                    "unlimited_stock": {
+                      "type": "boolean"
+                    },
+                    "variants": {
+                      "items": {
+                        "properties": {
+                          "badge": {
+                            "type": "string"
+                          },
+                          "compare_at_price": {
+                            "type": "integer"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "image_id": {
+                            "type": "string"
+                          },
+                          "on_sale": {
+                            "type": "boolean"
+                          },
+                          "options": {
+                            "properties": {
+                              "x": {
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "price": {
+                            "type": "integer"
+                          },
+                          "sku": {
+                            "type": "string"
+                          },
+                          "sold_out": {
+                            "type": "boolean"
+                          },
+                          "stock": {
+                            "type": "integer"
+                          },
+                          "weight_grams": {
+                            "type": "integer"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error envelope."
+          }
+        },
+        "summary": "Product by slug",
+        "tags": [
+          "Catalogue"
+        ]
+      }
+    },
+    "/shipping/destinations": {
+      "post": {
+        "description": "Search destinations by name (local, free).",
+        "operationId": "postShippingDestinations",
+        "parameters": [
+          {
+            "description": "The API date this client was written against. Absent means the baseline.",
+            "in": "header",
+            "name": "X-API-Version",
+            "required": false,
+            "schema": {
+              "example": "2026-09-09",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "limit": {
+                    "type": "integer"
+                  },
+                  "q": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "results": {
+                      "items": {
+                        "properties": {
+                          "city": {
+                            "type": "string"
+                          },
+                          "district": {
+                            "type": "string"
+                          },
+                          "label": {
+                            "type": "string"
+                          },
+                          "province": {
+                            "type": "string"
+                          },
+                          "ref": {
+                            "type": "string"
+                          },
+                          "subdistrict": {
+                            "type": "string"
+                          },
+                          "zip_code": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error envelope."
+          }
+        },
+        "summary": "Search destinations",
+        "tags": [
+          "Shipping"
+        ]
+      }
+    },
+    "/shipping/destinations/resolve": {
+      "post": {
+        "description": "Resolve one destination to what the couriers need.",
+        "operationId": "postShippingDestinationsResolve",
+        "parameters": [
+          {
+            "description": "The API date this client was written against. Absent means the baseline.",
+            "in": "header",
+            "name": "X-API-Version",
+            "required": false,
+            "schema": {
+              "example": "2026-09-09",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "ref": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "destination": {
+                      "properties": {
+                        "city": {
+                          "type": "string"
+                        },
+                        "district": {
+                          "type": "string"
+                        },
+                        "label": {
+                          "type": "string"
+                        },
+                        "province": {
+                          "type": "string"
+                        },
+                        "ref": {
+                          "type": "string"
+                        },
+                        "subdistrict": {
+                          "type": "string"
+                        },
+                        "zip_code": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error envelope."
+          }
+        },
+        "summary": "Resolve destination",
+        "tags": [
+          "Shipping"
+        ]
+      }
+    },
+    "/shipping/rates": {
+      "post": {
+        "description": "Shipping quotes for a cart and a destination. Returns the shipping_quote_id the draft needs.",
+        "operationId": "postShippingRates",
+        "parameters": [
+          {
+            "description": "The API date this client was written against. Absent means the baseline.",
+            "in": "header",
+            "name": "X-API-Version",
+            "required": false,
+            "schema": {
+              "example": "2026-09-09",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "destination_label": {
+                    "type": "string"
+                  },
+                  "destination_ref": {
+                    "type": "string"
+                  },
+                  "items": {
+                    "items": {
+                      "properties": {
+                        "product_id": {
+                          "type": "string"
+                        },
+                        "qty": {
+                          "type": "integer"
+                        },
+                        "variant_id": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "type": "array"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "destination_label": {
+                      "type": "string"
+                    },
+                    "free_shipping": {
+                      "type": "boolean"
+                    },
+                    "options": {
+                      "items": {
+                        "properties": {
+                          "cost": {
+                            "type": "integer"
+                          },
+                          "courier_code": {
+                            "type": "string"
+                          },
+                          "courier_name": {
+                            "type": "string"
+                          },
+                          "courier_service": {
+                            "type": "string"
+                          },
+                          "etd": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "quote_id": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "weight_grams": {
+                      "type": "integer"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error envelope."
+          }
+        },
+        "summary": "Shipping quotes",
+        "tags": [
+          "Shipping"
+        ]
+      }
+    },
+    "/storefront/config": {
+      "get": {
+        "description": "Brand, navigation, couriers and the payment methods on offer. One request per page load.",
+        "operationId": "getStorefrontConfig",
+        "parameters": [
+          {
+            "description": "The API date this client was written against. Absent means the baseline.",
+            "in": "header",
+            "name": "X-API-Version",
+            "required": false,
+            "schema": {
+              "example": "2026-09-09",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "brand": {
+                      "properties": {
+                        "about_body": {
+                          "type": "string"
+                        },
+                        "about_image": {
+                          "properties": {
+                            "alt": {
+                              "type": "string"
+                            },
+                            "srcset": {
+                              "type": "string"
+                            },
+                            "url": {
+                              "type": "string"
+                            }
+                          },
+                          "type": "object"
+                        },
+                        "about_title": {
+                          "type": "string"
+                        },
+                        "address_line1": {
+                          "type": "string"
+                        },
+                        "address_line2": {
+                          "type": "string"
+                        },
+                        "copyright": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "hero_eyebrow": {
+                          "type": "string"
+                        },
+                        "hero_images": {
+                          "items": {
+                            "properties": {
+                              "alt": {
+                                "type": "string"
+                              },
+                              "srcset": {
+                                "type": "string"
+                              },
+                              "url": {
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        "hero_stats": {
+                          "items": {
+                            "properties": {
+                              "label": {
+                                "type": "string"
+                              },
+                              "value": {
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        "logo_image": {
+                          "properties": {
+                            "alt": {
+                              "type": "string"
+                            },
+                            "srcset": {
+                              "type": "string"
+                            },
+                            "url": {
+                              "type": "string"
+                            }
+                          },
+                          "type": "object"
+                        },
+                        "nav": {
+                          "items": {
+                            "properties": {
+                              "label": {
+                                "type": "string"
+                              },
+                              "route": {
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        "origin_city": {
+                          "type": "string"
+                        },
+                        "product_care_copy": {
+                          "type": "string"
+                        },
+                        "product_shipping_copy": {
+                          "type": "string"
+                        },
+                        "section_copy": {
+                          "properties": {
+                            "cats_heading": {
+                              "type": "string"
+                            },
+                            "grid_see_all": {
+                              "type": "string"
+                            },
+                            "product_care_heading": {
+                              "type": "string"
+                            },
+                            "product_details_heading": {
+                              "type": "string"
+                            },
+                            "product_shipping_heading": {
+                              "type": "string"
+                            },
+                            "story_cta": {
+                              "type": "string"
+                            },
+                            "story_eyebrow": {
+                              "type": "string"
+                            }
+                          },
+                          "type": "object"
+                        },
+                        "social_image": {
+                          "properties": {
+                            "alt": {
+                              "type": "string"
+                            },
+                            "srcset": {
+                              "type": "string"
+                            },
+                            "url": {
+                              "type": "string"
+                            }
+                          },
+                          "type": "object"
+                        },
+                        "tagline": {
+                          "type": "string"
+                        },
+                        "tagline_short": {
+                          "type": "string"
+                        },
+                        "template": {
+                          "type": "string"
+                        },
+                        "whatsapp_text": {
+                          "type": "string"
+                        },
+                        "whatsapp_url": {
+                          "type": "string"
+                        },
+                        "wordmark_accent": {
+                          "type": "string"
+                        },
+                        "wordmark_primary": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "commerce": {
+                      "properties": {
+                        "couriers": {
+                          "items": {
+                            "properties": {
+                              "code": {
+                                "type": "string"
+                              },
+                              "cost": {
+                                "type": "integer"
+                              },
+                              "enabled": {
+                                "type": "boolean"
+                              },
+                              "eta": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "service": {
+                                "type": "string"
+                              },
+                              "services": {
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        "free_shipping_disabled": {
+                          "type": "boolean"
+                        },
+                        "free_shipping_min": {
+                          "type": "integer"
+                        },
+                        "payment_methods": {
+                          "items": {
+                            "properties": {
+                              "code": {
+                                "type": "string"
+                              },
+                              "enabled": {
+                                "type": "boolean"
+                              },
+                              "fee_basis_pt": {
+                                "type": "integer"
+                              },
+                              "fee_flat": {
+                                "type": "integer"
+                              },
+                              "max_order_total": {
+                                "type": "integer"
+                              },
+                              "min_order_total": {
+                                "type": "integer"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "sub": {
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        "shipping": {
+                          "properties": {
+                            "mode": {
+                              "type": "string"
+                            }
+                          },
+                          "type": "object"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "contact": {
+                      "properties": {
+                        "channel": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "payment": {
+                      "properties": {
+                        "account_holder": {
+                          "type": "string"
+                        },
+                        "qris_merchant_name": {
+                          "type": "string"
+                        },
+                        "qris_nmid": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "tenant": {
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "slug": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error envelope."
+          }
+        },
+        "summary": "Storefront config",
+        "tags": [
+          "Storefront"
+        ]
+      }
+    },
+    "/storefront/home": {
+      "get": {
+        "description": "The home page's sections, fully resolved.",
+        "operationId": "getStorefrontHome",
+        "parameters": [
+          {
+            "description": "The API date this client was written against. Absent means the baseline.",
+            "in": "header",
+            "name": "X-API-Version",
+            "required": false,
+            "schema": {
+              "example": "2026-09-09",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "announcement": {
+                      "properties": {
+                        "enabled": {
+                          "type": "boolean"
+                        },
+                        "text": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "sections": {
+                      "items": {
+                        "properties": {
+                          "banner": {
+                            "properties": {
+                              "bg": {
+                                "type": "string"
+                              },
+                              "cta": {
+                                "type": "string"
+                              },
+                              "text": {
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "campaign": {
+                            "properties": {
+                              "badge": {
+                                "type": "string"
+                              },
+                              "discount_type": {
+                                "type": "string"
+                              },
+                              "discount_value": {
+                                "type": "integer"
+                              },
+                              "ends_at": {
+                                "format": "date-time",
+                                "type": "string"
+                              },
+                              "products": {
+                                "items": {
+                                  "properties": {
+                                    "availability": {
+                                      "type": "string"
+                                    },
+                                    "badge": {
+                                      "type": "string"
+                                    },
+                                    "category_key": {
+                                      "type": "string"
+                                    },
+                                    "category_label": {
+                                      "type": "string"
+                                    },
+                                    "compare_at_price": {
+                                      "type": "integer"
+                                    },
+                                    "has_variants": {
+                                      "type": "boolean"
+                                    },
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "image": {
+                                      "type": "string"
+                                    },
+                                    "image_height": {
+                                      "type": "integer"
+                                    },
+                                    "image_srcset": {
+                                      "type": "string"
+                                    },
+                                    "image_width": {
+                                      "type": "integer"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "on_sale": {
+                                      "type": "boolean"
+                                    },
+                                    "preorder": {
+                                      "type": "boolean"
+                                    },
+                                    "preorder_lead_days": {
+                                      "type": "integer"
+                                    },
+                                    "price": {
+                                      "type": "integer"
+                                    },
+                                    "price_max": {
+                                      "type": "integer"
+                                    },
+                                    "sell_from": {
+                                      "format": "date-time",
+                                      "type": "string"
+                                    },
+                                    "sell_until": {
+                                      "format": "date-time",
+                                      "type": "string"
+                                    },
+                                    "slug": {
+                                      "type": "string"
+                                    },
+                                    "sold_out": {
+                                      "type": "boolean"
+                                    },
+                                    "stock": {
+                                      "type": "integer"
+                                    },
+                                    "unlimited_stock": {
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "type": "object"
+                                },
+                                "type": "array"
+                              },
+                              "title": {
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "cats": {
+                            "items": {
+                              "properties": {
+                                "image": {
+                                  "type": "string"
+                                },
+                                "image_srcset": {
+                                  "type": "string"
+                                },
+                                "key": {
+                                  "type": "string"
+                                },
+                                "label": {
+                                  "type": "string"
+                                },
+                                "material_spec": {
+                                  "type": "string"
+                                },
+                                "spec_label": {
+                                  "type": "string"
+                                },
+                                "subtitle": {
+                                  "type": "string"
+                                }
+                              },
+                              "type": "object"
+                            },
+                            "type": "array"
+                          },
+                          "grid": {
+                            "properties": {
+                              "products": {
+                                "items": {
+                                  "properties": {
+                                    "availability": {
+                                      "type": "string"
+                                    },
+                                    "badge": {
+                                      "type": "string"
+                                    },
+                                    "category_key": {
+                                      "type": "string"
+                                    },
+                                    "category_label": {
+                                      "type": "string"
+                                    },
+                                    "compare_at_price": {
+                                      "type": "integer"
+                                    },
+                                    "has_variants": {
+                                      "type": "boolean"
+                                    },
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "image": {
+                                      "type": "string"
+                                    },
+                                    "image_height": {
+                                      "type": "integer"
+                                    },
+                                    "image_srcset": {
+                                      "type": "string"
+                                    },
+                                    "image_width": {
+                                      "type": "integer"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "on_sale": {
+                                      "type": "boolean"
+                                    },
+                                    "preorder": {
+                                      "type": "boolean"
+                                    },
+                                    "preorder_lead_days": {
+                                      "type": "integer"
+                                    },
+                                    "price": {
+                                      "type": "integer"
+                                    },
+                                    "price_max": {
+                                      "type": "integer"
+                                    },
+                                    "sell_from": {
+                                      "format": "date-time",
+                                      "type": "string"
+                                    },
+                                    "sell_until": {
+                                      "format": "date-time",
+                                      "type": "string"
+                                    },
+                                    "slug": {
+                                      "type": "string"
+                                    },
+                                    "sold_out": {
+                                      "type": "boolean"
+                                    },
+                                    "stock": {
+                                      "type": "integer"
+                                    },
+                                    "unlimited_stock": {
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "type": "object"
+                                },
+                                "type": "array"
+                              },
+                              "title": {
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "hero": {
+                            "properties": {
+                              "cta": {
+                                "type": "string"
+                              },
+                              "em": {
+                                "type": "string"
+                              },
+                              "sub": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "story": {
+                            "properties": {
+                              "text": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "type": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "server_time": {
+                      "format": "date-time",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error envelope."
+          }
+        },
+        "summary": "Home page",
+        "tags": [
+          "Storefront"
+        ]
+      }
+    },
+    "/storefront/page/{key}": {
+      "get": {
+        "description": "Any published page.",
+        "operationId": "getStorefrontPageByKey",
+        "parameters": [
+          {
+            "description": "The API date this client was written against. Absent means the baseline.",
+            "in": "header",
+            "name": "X-API-Version",
+            "required": false,
+            "schema": {
+              "example": "2026-09-09",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "announcement": {
+                      "properties": {
+                        "enabled": {
+                          "type": "boolean"
+                        },
+                        "text": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "sections": {
+                      "items": {
+                        "properties": {
+                          "banner": {
+                            "properties": {
+                              "bg": {
+                                "type": "string"
+                              },
+                              "cta": {
+                                "type": "string"
+                              },
+                              "text": {
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "campaign": {
+                            "properties": {
+                              "badge": {
+                                "type": "string"
+                              },
+                              "discount_type": {
+                                "type": "string"
+                              },
+                              "discount_value": {
+                                "type": "integer"
+                              },
+                              "ends_at": {
+                                "format": "date-time",
+                                "type": "string"
+                              },
+                              "products": {
+                                "items": {
+                                  "properties": {
+                                    "availability": {
+                                      "type": "string"
+                                    },
+                                    "badge": {
+                                      "type": "string"
+                                    },
+                                    "category_key": {
+                                      "type": "string"
+                                    },
+                                    "category_label": {
+                                      "type": "string"
+                                    },
+                                    "compare_at_price": {
+                                      "type": "integer"
+                                    },
+                                    "has_variants": {
+                                      "type": "boolean"
+                                    },
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "image": {
+                                      "type": "string"
+                                    },
+                                    "image_height": {
+                                      "type": "integer"
+                                    },
+                                    "image_srcset": {
+                                      "type": "string"
+                                    },
+                                    "image_width": {
+                                      "type": "integer"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "on_sale": {
+                                      "type": "boolean"
+                                    },
+                                    "preorder": {
+                                      "type": "boolean"
+                                    },
+                                    "preorder_lead_days": {
+                                      "type": "integer"
+                                    },
+                                    "price": {
+                                      "type": "integer"
+                                    },
+                                    "price_max": {
+                                      "type": "integer"
+                                    },
+                                    "sell_from": {
+                                      "format": "date-time",
+                                      "type": "string"
+                                    },
+                                    "sell_until": {
+                                      "format": "date-time",
+                                      "type": "string"
+                                    },
+                                    "slug": {
+                                      "type": "string"
+                                    },
+                                    "sold_out": {
+                                      "type": "boolean"
+                                    },
+                                    "stock": {
+                                      "type": "integer"
+                                    },
+                                    "unlimited_stock": {
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "type": "object"
+                                },
+                                "type": "array"
+                              },
+                              "title": {
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "cats": {
+                            "items": {
+                              "properties": {
+                                "image": {
+                                  "type": "string"
+                                },
+                                "image_srcset": {
+                                  "type": "string"
+                                },
+                                "key": {
+                                  "type": "string"
+                                },
+                                "label": {
+                                  "type": "string"
+                                },
+                                "material_spec": {
+                                  "type": "string"
+                                },
+                                "spec_label": {
+                                  "type": "string"
+                                },
+                                "subtitle": {
+                                  "type": "string"
+                                }
+                              },
+                              "type": "object"
+                            },
+                            "type": "array"
+                          },
+                          "grid": {
+                            "properties": {
+                              "products": {
+                                "items": {
+                                  "properties": {
+                                    "availability": {
+                                      "type": "string"
+                                    },
+                                    "badge": {
+                                      "type": "string"
+                                    },
+                                    "category_key": {
+                                      "type": "string"
+                                    },
+                                    "category_label": {
+                                      "type": "string"
+                                    },
+                                    "compare_at_price": {
+                                      "type": "integer"
+                                    },
+                                    "has_variants": {
+                                      "type": "boolean"
+                                    },
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "image": {
+                                      "type": "string"
+                                    },
+                                    "image_height": {
+                                      "type": "integer"
+                                    },
+                                    "image_srcset": {
+                                      "type": "string"
+                                    },
+                                    "image_width": {
+                                      "type": "integer"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "on_sale": {
+                                      "type": "boolean"
+                                    },
+                                    "preorder": {
+                                      "type": "boolean"
+                                    },
+                                    "preorder_lead_days": {
+                                      "type": "integer"
+                                    },
+                                    "price": {
+                                      "type": "integer"
+                                    },
+                                    "price_max": {
+                                      "type": "integer"
+                                    },
+                                    "sell_from": {
+                                      "format": "date-time",
+                                      "type": "string"
+                                    },
+                                    "sell_until": {
+                                      "format": "date-time",
+                                      "type": "string"
+                                    },
+                                    "slug": {
+                                      "type": "string"
+                                    },
+                                    "sold_out": {
+                                      "type": "boolean"
+                                    },
+                                    "stock": {
+                                      "type": "integer"
+                                    },
+                                    "unlimited_stock": {
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "type": "object"
+                                },
+                                "type": "array"
+                              },
+                              "title": {
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "hero": {
+                            "properties": {
+                              "cta": {
+                                "type": "string"
+                              },
+                              "em": {
+                                "type": "string"
+                              },
+                              "sub": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "story": {
+                            "properties": {
+                              "text": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "type": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "server_time": {
+                      "format": "date-time",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error envelope."
+          }
+        },
+        "summary": "Page by key",
+        "tags": [
+          "Storefront"
+        ]
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "https://{host}/api/v1",
+      "variables": {
+        "host": {
+          "default": "toko.sepetak.com",
+          "description": "Any host the shop answers on."
+        }
+      }
+    }
+  ],
+  "tags": [
+    {
+      "name": "Storefront"
+    },
+    {
+      "name": "Catalogue"
+    },
+    {
+      "name": "Shipping"
+    },
+    {
+      "name": "Checkout"
+    },
+    {
+      "name": "Orders"
+    }
+  ]
+}

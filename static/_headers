@@ -1,0 +1,8 @@
+# Cloudflare Pages headers. The Markdown mirrors and the llms files are
+# fetched by agents, which want them as text, not downloads.
+/*.md
+  Content-Type: text/markdown; charset=utf-8
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
+/llms-full.txt
+  Content-Type: text/plain; charset=utf-8

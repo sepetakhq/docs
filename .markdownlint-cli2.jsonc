@@ -1,0 +1,12 @@
+{
+  // Hand-written pages only; generated ones are checked by their generator.
+  "ignores": ["docs/changelog.md", "node_modules/**", "build/**"],
+  "config": {
+    "default": true,
+    "MD013": false, // line length: tables and URLs
+    "MD033": false, // inline HTML: the CopyPrompt component on the index
+    "MD041": false, // first line heading: front matter comes first
+    "MD025": {"front_matter_title": ""}, // the h1 is the page title
+    "MD024": {"siblings_only": true},
+  },
+}

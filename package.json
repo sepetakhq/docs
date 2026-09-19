@@ -1,0 +1,58 @@
+{
+  "name": "@sepetakhq/docs",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "npm run generate && docusaurus start",
+    "build": "npm run generate && docusaurus build && node scripts/postbuild.mjs",
+    "generate": "node scripts/changelog.mjs",
+    "spec:sync": "node scripts/spec-sync.mjs",
+    "spec:check": "node scripts/spec-sync.mjs --check",
+    "serve": "docusaurus serve",
+    "clear": "docusaurus clear",
+    "test": "node --test scripts/scripts.test.mjs",
+    "lint": "prettier --check . && markdownlint-cli2 \"docs/**/*.md\"",
+    "format": "prettier --write .",
+    "typecheck": "tsc",
+    "docusaurus": "docusaurus"
+  },
+  "dependencies": {
+    "@docusaurus/core": "^3.10.2",
+    "@docusaurus/faster": "^3.10.2",
+    "@docusaurus/plugin-client-redirects": "^3.10.2",
+    "@docusaurus/preset-classic": "^3.10.2",
+    "@easyops-cn/docusaurus-search-local": "^0.55.3",
+    "@mdx-js/react": "^3.0.0",
+    "@scalar/docusaurus": "^0.8.40",
+    "clsx": "^2.0.0",
+    "prism-react-renderer": "^2.3.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@docusaurus/module-type-aliases": "^3.10.2",
+    "@docusaurus/tsconfig": "^3.10.2",
+    "@docusaurus/types": "^3.10.2",
+    "@types/react": "^19.0.0",
+    "markdownlint-cli2": "^0.23.2",
+    "prettier": "^3.9.8",
+    "typescript": "~6.0.2"
+  },
+  "browserslist": {
+    "production": [
+      ">0.5%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 3 chrome version",
+      "last 3 firefox version",
+      "last 5 safari version"
+    ]
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "description": "docs.sepetak.com \u2014 the Sepetak storefront API, for people and for their AI.",
+  "license": "MIT"
+}

@@ -1,0 +1,49 @@
+/* Infima tokens. Primary is Sepetak's brick; everything else is the default
+   theme so the site reads as documentation first. */
+:root {
+  --ifm-color-primary: #c2451f;
+  --ifm-color-primary-dark: #af3e1c;
+  --ifm-color-primary-darker: #a53b1a;
+  --ifm-color-primary-darkest: #883016;
+  --ifm-color-primary-light: #d04d24;
+  --ifm-color-primary-lighter: #d3552e;
+  --ifm-color-primary-lightest: #db6d4c;
+  --ifm-code-font-size: 92%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='dark'] {
+  --ifm-color-primary: #e9b44c;
+  --ifm-color-primary-dark: #e6a92f;
+  --ifm-color-primary-darker: #e4a321;
+  --ifm-color-primary-darkest: #c58a19;
+  --ifm-color-primary-light: #ecbf69;
+  --ifm-color-primary-lighter: #eec477;
+  --ifm-color-primary-lightest: #f3d5a1;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+.copyPrompt {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-left: 4px solid var(--ifm-color-primary);
+  border-radius: var(--ifm-global-radius);
+  margin-bottom: 1.5rem;
+}
+.copyPrompt pre {
+  margin: 0;
+  padding: 0;
+  background: none;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 0.9rem;
+}
+@media (max-width: 640px) {
+  .copyPrompt {
+    grid-template-columns: 1fr;
+  }
+}
