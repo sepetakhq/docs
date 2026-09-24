@@ -1615,7 +1615,7 @@
     },
     "/products": {
       "get": {
-        "description": "Catalogue listing; filter by cat, tag, sort, limit, offset.",
+        "description": "Catalogue listing; filter by cat, tag, q (name or slug, case-insensitive), sort, limit, offset.",
         "operationId": "getProducts",
         "parameters": [
           {
@@ -2438,6 +2438,20 @@
                           },
                           "type": "array"
                         },
+                        "icon_image": {
+                          "properties": {
+                            "alt": {
+                              "type": "string"
+                            },
+                            "srcset": {
+                              "type": "string"
+                            },
+                            "url": {
+                              "type": "string"
+                            }
+                          },
+                          "type": "object"
+                        },
                         "logo_image": {
                           "properties": {
                             "alt": {
@@ -2466,7 +2480,13 @@
                           },
                           "type": "array"
                         },
+                        "opening_hours": {
+                          "type": "string"
+                        },
                         "origin_city": {
+                          "type": "string"
+                        },
+                        "phone": {
                           "type": "string"
                         },
                         "product_care_copy": {
@@ -2477,10 +2497,67 @@
                         },
                         "section_copy": {
                           "properties": {
+                            "about_address_heading": {
+                              "type": "string"
+                            },
+                            "about_contact_heading": {
+                              "type": "string"
+                            },
+                            "about_hours_heading": {
+                              "type": "string"
+                            },
+                            "campaign_cta": {
+                              "type": "string"
+                            },
                             "cats_heading": {
                               "type": "string"
                             },
+                            "countdown_label": {
+                              "type": "string"
+                            },
+                            "footer_categories_heading": {
+                              "type": "string"
+                            },
+                            "footer_contact_heading": {
+                              "type": "string"
+                            },
+                            "footer_payment_heading": {
+                              "type": "string"
+                            },
+                            "footer_shipping_heading": {
+                              "type": "string"
+                            },
+                            "footer_shop_heading": {
+                              "type": "string"
+                            },
                             "grid_see_all": {
+                              "type": "string"
+                            },
+                            "hero_chip_couriers": {
+                              "type": "string"
+                            },
+                            "hero_chip_payment": {
+                              "type": "string"
+                            },
+                            "hero_chip_shipping": {
+                              "type": "string"
+                            },
+                            "hero_chip_shipping_note": {
+                              "type": "string"
+                            },
+                            "hero_secondary_cta": {
+                              "type": "string"
+                            },
+                            "origin_note": {
+                              "type": "string"
+                            },
+                            "origin_prefix": {
+                              "type": "string"
+                            },
+                            "product_ask_label": {
+                              "type": "string"
+                            },
+                            "product_ask_message": {
                               "type": "string"
                             },
                             "product_care_heading": {
@@ -2490,6 +2567,15 @@
                               "type": "string"
                             },
                             "product_shipping_heading": {
+                              "type": "string"
+                            },
+                            "promo_subtitle": {
+                              "type": "string"
+                            },
+                            "promo_title": {
+                              "type": "string"
+                            },
+                            "related_heading": {
                               "type": "string"
                             },
                             "story_cta": {
@@ -2514,6 +2600,20 @@
                             }
                           },
                           "type": "object"
+                        },
+                        "social_links": {
+                          "items": {
+                            "properties": {
+                              "kind": {
+                                "type": "string"
+                              },
+                              "url": {
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "type": "array"
                         },
                         "tagline": {
                           "type": "string"
@@ -2744,6 +2844,9 @@
                                 "format": "date-time",
                                 "type": "string"
                               },
+                              "headline": {
+                                "type": "string"
+                              },
                               "products": {
                                 "items": {
                                   "properties": {
@@ -2857,6 +2960,31 @@
                               "type": "object"
                             },
                             "type": "array"
+                          },
+                          "features": {
+                            "properties": {
+                              "items": {
+                                "items": {
+                                  "properties": {
+                                    "body": {
+                                      "type": "string"
+                                    },
+                                    "mark": {
+                                      "type": "string"
+                                    },
+                                    "title": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "type": "object"
+                                },
+                                "type": "array"
+                              },
+                              "title": {
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
                           },
                           "grid": {
                             "properties": {
@@ -3085,6 +3213,9 @@
                                 "format": "date-time",
                                 "type": "string"
                               },
+                              "headline": {
+                                "type": "string"
+                              },
                               "products": {
                                 "items": {
                                   "properties": {
@@ -3198,6 +3329,31 @@
                               "type": "object"
                             },
                             "type": "array"
+                          },
+                          "features": {
+                            "properties": {
+                              "items": {
+                                "items": {
+                                  "properties": {
+                                    "body": {
+                                      "type": "string"
+                                    },
+                                    "mark": {
+                                      "type": "string"
+                                    },
+                                    "title": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "type": "object"
+                                },
+                                "type": "array"
+                              },
+                              "title": {
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
                           },
                           "grid": {
                             "properties": {
