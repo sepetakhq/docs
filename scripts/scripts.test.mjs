@@ -79,8 +79,21 @@ test('changelog renders newest first, marks current and baseline, links each ref
 });
 
 test('toPlainMarkdown drops front matter and MDX lines, keeps prose', () => {
-  const src = '---\ntitle: X\n---\n\nimport C from "@site/c";\n\n# X\n\n<C text="y" />\n\nBody `code`.\n';
-  assert.equal(toPlainMarkdown(src), '# X\n\nBody `code`.\n');
+  const src =
+    '---\ntitle: X\n---\n\nimport C from "@site/c";\n\n# X\n\n<D />\n<C text="y" />\n\nBody `code`.\n';
+  assert.equal(toPlainMarkdown(src), '# X\n\n```text\ny\n```\n\nBody `code`.\n');
+});
+
+test('toPlainMarkdown points site links at the Markdown mirrors', () => {
+  const md = toPlainMarkdown(
+    '[A](/guide/access) [R](/api) [H](/) [S](/guide/limits#codes) [L](pathname:///llms.txt) [X](https://x.test/a)\n',
+  );
+  assert.equal(
+    md,
+    '[A](https://docs.sepetak.com/guide/access.md) [R](https://docs.sepetak.com/api/reference.md) ' +
+      '[H](https://docs.sepetak.com/index.md) [S](https://docs.sepetak.com/guide/limits.md#codes) ' +
+      '[L](https://docs.sepetak.com/llms.txt) [X](https://x.test/a)\n',
+  );
 });
 
 test('reference flattens request and response fields with dotted paths', () => {
@@ -134,8 +147,21 @@ test('llms index groups guide pages, the reference and the rest', () => {
     {permalink: '/changelog', title: 'Changelog', description: 'Changes.'},
   ];
   const txt = llmsIndex(routes, '2026-09-09');
-  assert.match(txt, /## Guide\n\n- \[Access\]\(https:\/\/docs\.sepetak\.com\/guide\/access\.md\): No key\./);
+  assert.match(txt, /\n- \[Access\]\(https:\/\/docs\.sepetak\.com\/guide\/access\.md\): No key\./);
   assert.match(txt, /current version 2026-09-09\]\(https:\/\/docs\.sepetak\.com\/api\/reference\.md\)/);
   assert.match(txt, /## Other\n\n- \[Changelog\]/);
   assert.doesNotMatch(txt, /Home/);
+});
+
+test('llms index opens the guide with the home page and keeps the given order', () => {
+  const routes = [
+    {permalink: '/', title: 'Home', description: 'Start here.'},
+    {permalink: '/guide/quickstart', title: 'Quickstart', description: ''},
+    {permalink: '/guide/checkout', title: 'Checkout', description: ''},
+  ];
+  const txt = llmsIndex(routes, '2026-09-09');
+  assert.match(
+    txt,
+    /## Guide\n\n- \[Overview\]\(https:\/\/docs\.sepetak\.com\/index\.md\): Start here\.\n- \[Quickstart\][^\n]*\n- \[Checkout\]/,
+  );
 });

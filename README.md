@@ -4,12 +4,12 @@ The source of [docs.sepetak.com](https://docs.sepetak.com): how to build a store
 
 ## What is where
 
-| Path                                                                               | What                                                                                      | Edited by           |
-| ---------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------- |
-| `docs/index.md`, `docs/guide/*.md`                                                 | The guide                                                                                 | hand                |
-| `specs/<version>.json`                                                             | The OpenAPI document per API version, copied from `https://sepetak.com/openapi.json`      | `npm run spec:sync` |
-| `docs/changelog.md`                                                                | What each version changed (`info.x-changes`)                                              | `npm run generate`  |
-| `build/**/*.md`, `build/llms.txt`, `build/llms-full.txt`, `build/api/reference.md` | The site for machines: every page as Markdown at its own path, plus the index agents read | `npm run build`     |
+| Path                                                                               | What                                                                                              | Edited by           |
+| ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------- |
+| `docs/index.md`, `docs/guide/*.md`                                                 | The guide                                                                                         | hand                |
+| `specs/<version>.json`                                                             | The OpenAPI document per API version, copied from `https://sepetak.com/openapi.json`              | `npm run spec:sync` |
+| `docs/changelog.md`                                                                | What each version changed (`info.x-changes`)                                                      | `npm run generate`  |
+| `build/**/*.md`, `build/llms.txt`, `build/llms-full.txt`, `build/api/reference.md` | The site for machines: every page as Markdown at its route plus `.md`, plus the index agents read | `npm run build`     |
 
 Nothing about the API's shape is written here by hand. The platform generates the spec from its own types; this repo renders it. If the reference is wrong, the fix is in the platform.
 
@@ -39,7 +39,7 @@ CI fails when `specs/` differs from the live API or when the changelog is stale,
 
 ## For AI agents
 
-`https://docs.sepetak.com/llms.txt` is the index; every page exists as `.md` at the same URL as its HTML; `/api/reference.md` is the whole current API as plain Markdown; the OpenAPI document itself is served by the platform at `https://sepetak.com/openapi.json`.
+`https://docs.sepetak.com/llms.txt` is the index; every guide page exists as Markdown at its URL plus `.md` (the home page is `/index.md`); `/api/reference.md` is the whole current API as plain Markdown; the OpenAPI document itself is served by the platform at `https://sepetak.com/openapi.json`.
 
 ## License
 

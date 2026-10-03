@@ -13,6 +13,7 @@ const sidebars: SidebarsConfig = {
         'guide/access',
         'guide/quickstart',
         'guide/checkout',
+        'guide/payments',
         'guide/errors',
         'guide/limits',
         'guide/versions',

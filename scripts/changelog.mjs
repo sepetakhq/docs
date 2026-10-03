@@ -16,7 +16,7 @@ export function render(versions, read = readSpec) {
     const body = changes.length
       ? changes.map((c) => `- ${c}`).join('\n')
       : i === versions.length - 1
-        ? '- Baseline. The shape every unpinned request receives; it stays fixed.'
+        ? '- Baseline. The shape every unpinned request receives. Later versions add to it; [Versions](/guide/versions) names the one requirement that reached it too.'
         : '- No shape changes recorded.';
     const link = '/api';
     return `## ${label}\n\n${body}\n\nReference: [${v}](${link}) (pick it in the document switcher) · [openapi.json](https://sepetak.com/openapi.json?version=${v})\n`;

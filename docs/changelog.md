@@ -19,6 +19,6 @@ Reference: [2026-09-09](/api) (pick it in the document switcher) · [openapi.jso
 
 ## 2026-09-05
 
-- Baseline. The shape every unpinned request receives; it stays fixed.
+- Baseline. The shape every unpinned request receives. Later versions add to it; [Versions](/guide/versions) names the one requirement that reached it too.
 
 Reference: [2026-09-05](/api) (pick it in the document switcher) · [openapi.json](https://sepetak.com/openapi.json?version=2026-09-05)
