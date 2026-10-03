@@ -6,7 +6,7 @@ sidebar_position: 4
 
 # Payments
 
-The buyer picks a method from `commerce.payment_methods` in `GET /storefront/config`: send its `code` as `payment_method` in the draft and show its `name` as given. A merchant's own bank slots arrive already named, for example `Transfer SeaBank`.
+The buyer picks a method from `commerce.payment_methods` in `GET /storefront/config`: send its `code` as `payment_method` in the draft and show its `name` as given. A merchant's own bank slots arrive already named, for example `Transfer SeaBank`. A method the platform has a badge for carries `logo_url`, an SVG you can draw with `name` as its alt text. Bank slots never have one, so fall back to `name` when it is missing. Use the URL as given: it carries a version, and the file behind it never changes.
 
 The verify answer and `GET /orders/track/{token}` carry a `payment`. Branch on `payment.kind` and show `payment.amount` exactly: for manual methods other than WhatsApp it includes `order.unique_code`, which is how the merchant tells one transfer from another.
 

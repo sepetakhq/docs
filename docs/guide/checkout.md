@@ -12,7 +12,7 @@ The server prices the cart; your site sends `product_id`, `variant_id` and `qty`
 
 Read `commerce.shipping.mode` from `GET /storefront/config` first.
 
-- **`flat`**: skip the shipping calls. The buyer picks one of `commerce.couriers`; send its `code` as `courier_code` in the draft.
+- **`flat`**: skip the shipping calls. The buyer picks one of `commerce.couriers`; send its `code` as `courier_code` in the draft. A courier the platform knows carries `logo_url`, and `options[].courier_logo_url` does the same for live rates. Draw the logo when it is there and the name when it is not.
 - **`live`**: quote the cart for the buyer's address.
 
 | Call                                  | Does                                       | Returns                                              |
