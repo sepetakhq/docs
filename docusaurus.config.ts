@@ -119,7 +119,14 @@ const config: Config = {
             '.agent-button-container { display: none }',
           ].join(' '),
           documentDownloadType: 'json',
-          servers: [{url: 'https://toko.sepetak.com/api/v1', description: 'Any host the shop answers on'}],
+          // An editable host, so no sample calls a shop that does not exist.
+          servers: [
+            {
+              url: 'https://{host}/api/v1',
+              description: 'Your shop: its sepetak.com subdomain or its own domain',
+              variables: {host: {default: 'your-shop.sepetak.com'}},
+            },
+          ],
           theme: 'default',
           metaData: {title: 'API reference — Sepetak Docs'},
         },

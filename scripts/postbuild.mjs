@@ -2,10 +2,11 @@
 // After `docusaurus build`: the machine-readable side of the site.
 //
 //   build/<route>.md       the Markdown source of every hand-written page,
-//                          at the same path as its HTML
+//                          at its route plus .md (the home page is index.md)
 //   build/api/reference.md the current API as plain Markdown, derived from
-//                          the spec (the generated reference pages are MDX
-//                          full of components -- useless to an agent)
+//                          the spec (Scalar renders /api in the browser, so
+//                          there is no page source to mirror)
+//   build/api.md           a pointer to api/reference.md, for the guessed URL
 //   build/llms.txt         the index (llmstxt.org)
 //   build/llms-full.txt    everything above in one file
 //
@@ -21,8 +22,7 @@ const ROOT = new URL('..', import.meta.url).pathname;
 const SITE = 'https://docs.sepetak.com';
 
 // Docusaurus leaves one JSON per doc under .docusaurus/.../default/, each
-// naming its permalink and source file. Generated API pages are skipped:
-// their Markdown is the reference below.
+// naming its permalink, source file and sidebar position.
 export function docRoutes(root = ROOT) {
   const dir = join(root, '.docusaurus/docusaurus-plugin-content-docs/default');
   if (!existsSync(dir)) throw new Error('run `docusaurus build` first');
@@ -30,7 +30,7 @@ export function docRoutes(root = ROOT) {
     readdirSync(dir)
       .filter((f) => f.startsWith('site-docs-') && f.endsWith('.json'))
       .map((f) => JSON.parse(readFileSync(join(dir, f), 'utf8')))
-      .filter((m) => m.permalink && m.source && !m.source.includes('/docs/api/'))
+      .filter((m) => m.permalink && m.source)
       // A metadata file can outlive its doc (the cache is not cleared on delete).
       .filter((m) => existsSync(join(root, m.source.replace(/^@site\//, ''))))
       .map((m) => ({
@@ -38,19 +38,35 @@ export function docRoutes(root = ROOT) {
         title: m.title,
         description: m.description ?? '',
         file: m.source.replace(/^@site\//, ''),
+        position: m.sidebarPosition ?? Infinity,
       }))
-      .sort((a, b) => a.permalink.localeCompare(b.permalink))
+      // Reading order, as the sidebar shows it; permalink breaks ties.
+      .sort((a, b) => a.position - b.position || a.permalink.localeCompare(b.permalink))
   );
 }
 
-// Front matter and MDX-only lines removed; the prose stays as written.
+// Front matter and MDX-only lines removed; the prose stays as written. A
+// component that carries its words in `text` (CopyPrompt) keeps them as a
+// fenced block, and site links point at the Markdown mirrors, so an agent
+// reading one .md file can follow every link without landing on HTML.
 export function toPlainMarkdown(src) {
   return (
     src
       .replace(/^---\n[\s\S]*?\n---\n/, '')
       .split('\n')
-      .filter((l) => !/^import .* from ['"].*['"];?$/.test(l) && !/^<[A-Z][A-Za-z]* .*\/>$/.test(l.trim()))
+      .filter((l) => !/^import .* from ['"].*['"];?$/.test(l))
+      .map((l) => {
+        const c = l.trim().match(/^<[A-Z][A-Za-z]* .*\/>$/);
+        if (!c) return l;
+        const text = l.match(/\btext="([^"]*)"/);
+        return text ? '```text\n' + text[1] + '\n```' : null;
+      })
+      .filter((l) => l !== null)
       .join('\n')
+      .replace(/\(pathname:\/\/\//g, `(${SITE}/`)
+      .replace(/\]\(\/([^)#\s]*)(#[^)\s]*)?\)/g, (_, path, hash = '') =>
+        path === 'api' ? `](${SITE}/api/reference.md${hash})` : `](${SITE}/${path || 'index'}.md${hash})`,
+      )
       .replace(/\n{3,}/g, '\n\n')
       .trim() + '\n'
   );
@@ -90,6 +106,7 @@ export function fieldLines(schema, prefix = '') {
 }
 
 export function llmsIndex(routes, current) {
+  const home = routes.find((r) => r.permalink === '/');
   const guide = routes.filter((r) => r.permalink.startsWith('/guide'));
   const rest = routes.filter((r) => !r.permalink.startsWith('/guide') && r.permalink !== '/');
   const line = (r) => `- [${r.title}](${SITE}${r.permalink}.md)${r.description ? `: ${r.description}` : ''}`;
@@ -100,6 +117,7 @@ export function llmsIndex(routes, current) {
     '',
     '## Guide',
     '',
+    ...(home ? [`- [Overview](${SITE}/index.md)${home.description ? `: ${home.description}` : ''}`] : []),
     ...guide.map(line),
     '',
     '## API reference',
@@ -130,6 +148,10 @@ export function run(root = ROOT) {
   const reference = referenceMarkdown(readSpec(current));
   mkdirSync(join(build, 'api'), {recursive: true});
   writeFileSync(join(build, 'api/reference.md'), reference);
+  writeFileSync(
+    join(build, 'api.md'),
+    `# Sepetak storefront API reference\n\nThe reference as Markdown is at ${SITE}/api/reference.md.\n`,
+  );
   writeFileSync(join(build, 'llms.txt'), llmsIndex(routes, current));
   writeFileSync(
     join(build, 'llms-full.txt'),
