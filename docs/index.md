@@ -1,6 +1,6 @@
 ---
 title: Sepetak storefront API
-description: Build your own storefront on a Sepetak shop. Same API as the hosted templates, no API key.
+description: Build your own storefront on a Sepetak shop. Same API as the hosted templates, no API key. AI agents connect to a shop over MCP.
 slug: /
 sidebar_position: 1
 ---
@@ -22,8 +22,10 @@ Build your own storefront on a Sepetak shop. Your site calls the same API the ho
 
 ## Where to start
 
-1. [Access](/guide/access): there is no key; your site's domain decides.
+1. [Access](/guide/access): the storefront API takes no key; your site's domain decides.
 2. [Quickstart](/guide/quickstart): one `fetch`.
 3. [Checkout](/guide/checkout): the sequence and the rules the server enforces.
 4. [Payments](/guide/payments): what to render for each payment kind.
 5. [API reference](/api): every route and field, rendered from the spec.
+
+Running a shop with an AI assistant instead? See [Connect AI (MCP)](/guide/mcp).

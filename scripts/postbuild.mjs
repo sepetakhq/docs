@@ -113,7 +113,7 @@ export function llmsIndex(routes, current) {
   return [
     '# Sepetak',
     '',
-    "> Sepetak is a hosted storefront platform for Indonesian small shops. Each shop has a public storefront API at https://<shop>.sepetak.com/api/v1; a merchant's own site (headless) calls it from a domain registered to the shop. No API key.",
+    "> Sepetak is a hosted storefront platform for Indonesian small shops. Each shop has a public storefront API at https://<shop>.sepetak.com/api/v1; a merchant's own site (headless) calls it from a domain registered to the shop. No API key. Merchants connect AI agents to their shop over MCP at https://mcp.sepetak.com/mcp.",
     '',
     '## Guide',
     '',
