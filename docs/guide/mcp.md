@@ -60,7 +60,7 @@ VS Code, `.vscode/mcp.json`:
 
 - One key or connection is one person on one shop.
 - Staff manage their own keys. The owner sees and revokes every key and connection on the shop.
-- Operators cannot hold keys.
+- An operator account connects like any account: only to shops it is an owner or staff member of, with that role. A key never carries operator reach to other shops.
 - The plan's API access caps what an agent can do: `none` gives it no tools, `read` gives it the read tools only. Today every plan includes write.
 
 ## Tools
