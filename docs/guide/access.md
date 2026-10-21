@@ -15,7 +15,7 @@ There is no API key. The shop is the host you call.
 
 ## Attach your domain
 
-The shop owner attaches your site's domain in the backoffice: **Staf, domain & API** → **Domain**. Mula, Tumbuh and Skala include own domains. On Gratis, the owner buys the **Domain sendiri** add-on first, one slot per hostname.
+The shop owner attaches your site's domain in the backoffice: **Pengaturan → Integrasi** → **Domain**. Mula, Tumbuh and Skala include own domains. On Gratis, the owner buys the **Domain sendiri** add-on first, one slot per hostname.
 
 The API matches your origin by hostname only, over `http` or `https`; the port does not matter. Production does not accept `localhost` or an IP address as an origin, and neither can be attached. During development, call the API through your dev server's proxy, or from a hostname you have attached.
 
