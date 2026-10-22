@@ -2301,6 +2301,9 @@
                           "courier_code": {
                             "type": "string"
                           },
+                          "courier_logo_url": {
+                            "type": "string"
+                          },
                           "courier_name": {
                             "type": "string"
                           },
@@ -2656,6 +2659,9 @@
                               "eta": {
                                 "type": "string"
                               },
+                              "logo_url": {
+                                "type": "string"
+                              },
                               "name": {
                                 "type": "string"
                               },
@@ -2693,6 +2699,9 @@
                               },
                               "fee_flat": {
                                 "type": "integer"
+                              },
+                              "logo_url": {
+                                "type": "string"
                               },
                               "max_order_total": {
                                 "type": "integer"

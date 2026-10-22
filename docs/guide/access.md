@@ -1,12 +1,14 @@
 ---
 title: Access
-description: No API key. A server may call every route; a browser page must run on a domain attached to the shop.
+description: The storefront API takes no key. A server may call every route; a browser page must run on a domain attached to the shop.
 sidebar_position: 1
 ---
 
 # Access
 
-There is no API key. The shop is the host you call.
+The storefront API takes no API key. The shop is the host you call.
+
+API keys exist only for AI agents a merchant connects over MCP, and they work only at the MCP endpoint, never on the storefront or admin API ([Connect AI](/guide/mcp)).
 
 | From      | Rule                                                                                                                                                |
 | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -32,4 +34,4 @@ Besides `Content-Type`, a request may carry `X-API-Version`, `Idempotency-Key` a
 | Attached to another Sepetak shop    | `403 forbidden`, with CORS headers, so your page can read it.                                                          |
 | Attached to no shop, or `localhost` | No CORS headers at all. The browser reports a CORS or network error and your code sees no response. Attach the domain. |
 
-An operator can narrow API access for a whole plan by hand. A cross-origin request outside it answers `403 plan_limit` with `details.quota: "api_access"` and `details.need` (`read` or `write`). No plan sets such a limit by default. See [Errors](/guide/errors).
+An operator can narrow API access for a whole plan by hand. A cross-origin request outside it answers `403 plan_limit` with `details.quota: "api_access"` and `details.need` (`read` or `write`). No plan sets such a limit by default. The same setting caps AI agents ([Connect AI](/guide/mcp)). See [Errors](/guide/errors).

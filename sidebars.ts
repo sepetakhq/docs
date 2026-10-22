@@ -17,6 +17,7 @@ const sidebars: SidebarsConfig = {
         'guide/errors',
         'guide/limits',
         'guide/versions',
+        'guide/mcp',
       ],
     },
     'changelog',
