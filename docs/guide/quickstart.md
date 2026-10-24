@@ -10,7 +10,7 @@ sidebar_position: 2
 const BASE = 'https://<shop>.sepetak.com/api/v1';
 
 const res = await fetch(`${BASE}/products?limit=12`, {
-  headers: {'X-API-Version': '2026-09-09'},
+  headers: {'X-API-Version': '2026-10-20'},
   credentials: 'omit',
 });
 const {products} = await res.json();
