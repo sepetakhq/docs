@@ -15,8 +15,8 @@ Every error is `{ "error": { "code", "message", "details" } }`. Branch on the st
     "message": "Versi aplikasi ini sudah tidak didukung. Muat ulang halaman ya.",
     "details": {
       "requested": "2030-01-01",
-      "supported": ["2026-09-05", "2026-09-09"],
-      "latest": "2026-09-09"
+      "supported": ["2026-09-05", "2026-09-09", "2026-10-20"],
+      "latest": "2026-10-20"
     }
   }
 }
@@ -28,20 +28,22 @@ Every error is `{ "error": { "code", "message", "details" } }`. Branch on the st
 
 ## Checkout and orders
 
-| Status · code                            | Where                                               | Do                                                                                           |
-| ---------------------------------------- | --------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| `400 bad_request`                        | any `POST`                                          | The body is missing or wrong; show `message` next to the form.                               |
-| `400 bad_request`                        | `/checkout/otp/verify`, `/orders/lookup/otp/verify` | The code is wrong, expired or tried too often. One answer for all three; show it as refused. |
-| `400 otp_required`                       | `/checkout/otp/verify`                              | Verify needs a code; call `/checkout/otp/send` first.                                        |
-| `409 draft_expired`                      | send, verify                                        | The draft is older than 30 minutes. Build it again.                                          |
-| `409 draft_consumed`, `409 order_exists` | send, verify                                        | The order already exists. Do not submit again.                                               |
-| `409 unavailable`                        | draft, verify                                       | Stock changed. Send the buyer back to the cart.                                              |
-| `409 voucher_limit`                      | send, verify                                        | The voucher is used up, overall or for this buyer. Rebuild the draft without it.             |
-| `409 store_closed`                       | draft, send, verify                                 | The shop is on holiday. Show `message`; it names the reopening day when there is one.        |
-| `409 conflict` + `Retry-After`           | verify                                              | The same `Idempotency-Key` is still running. Retry after that many seconds.                  |
-| `422 unprocessable`                      | verify                                              | The `Idempotency-Key` was reused with a different body. Use a new key.                       |
-| `429 rate_limited` + `Retry-After`       | code sends                                          | Too many codes. Drive the resend countdown from `Retry-After`.                               |
-| `503 unavailable`                        | `/checkout/otp/send`                                | The code could not be delivered. Offer a retry.                                              |
+| Status · code                            | Where                                               | Do                                                                                                |
+| ---------------------------------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `400 bad_request`                        | any `POST`                                          | The body is missing or wrong; show `message` next to the form.                                    |
+| `400 bad_request`                        | `/checkout/otp/verify`, `/orders/lookup/otp/verify` | The code is wrong, expired or tried too often. One answer for all three; show it as refused.      |
+| `400 otp_required`                       | `/checkout/otp/verify`                              | Verify needs a code; call `/checkout/otp/send` first.                                             |
+| `409 draft_expired`                      | send, verify                                        | The draft is older than 30 minutes. Build it again.                                               |
+| `409 draft_consumed`, `409 order_exists` | send, verify                                        | The order already exists. Do not submit again.                                                    |
+| `409 unavailable`                        | draft, verify                                       | Stock changed. Send the buyer back to the cart.                                                   |
+| `422 qty_step`                           | draft                                               | A line is under `qty_min`, off `qty_step` or over 99 sale units. Fix the stepper; show `message`. |
+| `422 unit_needs_update`                  | draft                                               | A site on a version before `2026-10-20` ordered a product sold by weight. Pin `2026-10-20`.       |
+| `409 voucher_limit`                      | send, verify                                        | The voucher is used up, overall or for this buyer. Rebuild the draft without it.                  |
+| `409 store_closed`                       | draft, send, verify                                 | The shop is on holiday. Show `message`; it names the reopening day when there is one.             |
+| `409 conflict` + `Retry-After`           | verify                                              | The same `Idempotency-Key` is still running. Retry after that many seconds.                       |
+| `422 unprocessable`                      | verify                                              | The `Idempotency-Key` was reused with a different body. Use a new key.                            |
+| `429 rate_limited` + `Retry-After`       | code sends                                          | Too many codes. Drive the resend countdown from `Retry-After`.                                    |
+| `503 unavailable`                        | `/checkout/otp/send`                                | The code could not be delivered. Offer a retry.                                                   |
 
 ## Shipping
 
@@ -68,13 +70,14 @@ Every error is `{ "error": { "code", "message", "details" } }`. Branch on the st
 
 ## Access and everything else
 
-| Status · code                 | Do                                                                                |
-| ----------------------------- | --------------------------------------------------------------------------------- |
-| `403 forbidden`               | Your origin is attached to another shop ([Access](/guide/access)).                |
-| `403 plan_limit`              | An operator narrowed this shop's API access; `details.need` is `read` or `write`. |
-| `400 unsupported_api_version` | Unknown date; `details.supported` lists the served ones.                          |
-| `404 not_found`               | Unknown shop host, product, page or order token.                                  |
-| `413 error`                   | The body is over 1 MB; `message` is English.                                      |
-| `429 rate_limited`            | A per-IP budget ran out. Wait `Retry-After` seconds ([Limits](/guide/limits)).    |
-| `500 internal`                | Our fault. Show your own copy and retry later.                                    |
-| `503 unavailable`             | The shop is paused, or a dependency is down.                                      |
+| Status · code                 | Do                                                                                            |
+| ----------------------------- | --------------------------------------------------------------------------------------------- |
+| `403 forbidden`               | Your origin is attached to another shop ([Access](/guide/access)).                            |
+| `403 plan_limit`              | An operator narrowed this shop's API access; `details.need` is `read` or `write`.             |
+| `400 unsupported_api_version` | Unknown date; `details.supported` lists the served ones.                                      |
+| `404 not_found`               | Unknown shop host, product, page or order token.                                              |
+| `404 storefront_off`          | The shop sells through its counter only; every storefront route answers this. Show `message`. |
+| `413 error`                   | The body is over 1 MB; `message` is English.                                                  |
+| `429 rate_limited`            | A per-IP budget ran out. Wait `Retry-After` seconds ([Limits](/guide/limits)).                |
+| `500 internal`                | Our fault. Show your own copy and retry later.                                                |
+| `503 unavailable`             | The shop is paused, or a dependency is down.                                                  |

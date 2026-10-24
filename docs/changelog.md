@@ -11,7 +11,16 @@ sidebar_position: 9
 Each API version is a date. Pin one with `X-API-Version`; an unpinned request gets the baseline.
 Old versions stay served. See [Versions](/guide/versions).
 
-## 2026-09-09 (current)
+## 2026-10-20 (current)
+
+- orders carry loyalty points
+- orders carry fulfilment
+- products and lines carry a unit
+- storefront config says whether to show the Sepetak badge
+
+Reference: [2026-10-20](/api) (pick it in the document switcher) · [openapi.json](https://sepetak.com/openapi.json?version=2026-10-20)
+
+## 2026-09-09
 
 - checkout draft requires a buyer phone
 
