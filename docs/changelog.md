@@ -17,6 +17,7 @@ Old versions stay served. See [Versions](/guide/versions).
 - orders carry fulfilment
 - products and lines carry a unit
 - storefront config says whether to show the Sepetak badge
+- storefront config names the shop's time zone
 
 Reference: [2026-10-20](/api) (pick it in the document switcher) · [openapi.json](https://sepetak.com/openapi.json?version=2026-10-20)
 
