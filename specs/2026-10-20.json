@@ -85,7 +85,8 @@
       "orders carry loyalty points",
       "orders carry fulfilment",
       "products and lines carry a unit",
-      "storefront config says whether to show the Sepetak badge"
+      "storefront config says whether to show the Sepetak badge",
+      "storefront config names the shop's time zone"
     ],
     "x-versions": [
       "2026-09-05",
@@ -2858,6 +2859,12 @@
                           "type": "boolean"
                         },
                         "slug": {
+                          "type": "string"
+                        },
+                        "time_zone": {
+                          "type": "string"
+                        },
+                        "time_zone_label": {
                           "type": "string"
                         }
                       },
