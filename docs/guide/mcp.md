@@ -90,14 +90,15 @@ Read:
 
 - `list_shops`, `get_business_summary` (every shop on the connection at once)
 - `get_shop_overview` (also the shop's `taxes`: the ids `tax_choice` names)
-- `list_products`, `get_product` (stock is the online outlet's; search also matches product and variant codes; each product has its own `sku`; `get_product` also says `cost` (harga modal), `tax_exempt`, `tax_choice` and where the product is sold, `sell_on`)
+- `list_products`, `get_product` (stock is the online outlet's; search also matches product and variant codes; each product has its own `sku`; `get_product` also says `cost` (harga modal), `tax_exempt`, `tax_choice` and where the product is sold, `sell_on`, and its rental settings, `rental`: price rows by length in minutes, the buffer before it can go out again and the jaminan asked; `null` when it is not rented out)
 - `list_categories`
-- `list_orders`, `get_order` (each with the `outlet_id` it was sold at; `get_order` lists each tax under `taxes`, and only `tax_added` grew the total)
+- `list_orders`, `get_order` (each with the `outlet_id` it was sold at; `get_order` lists each tax under `taxes`, and only `tax_added` grew the total; a rental carries `rental`: its pickup and return times, when it was handed over and returned, its `state`, jaminan and extra `charges`; an extension, late fee or damage charge carries `rental_of`, the rental it belongs to)
 - `list_customers`, `get_customer`
 - `get_sales_summary`
 - `list_promotions`
 - `list_outlets` (each with its `time_zone`, such as `Asia/Makassar`, and `time_zone_label`, such as `WITA`, its opening hours, apps and its own holiday), `get_stock` (per outlet), `get_stock_history`, `list_transfers`
 - `list_reservations` (one day, or `from`/`to` up to 31 days; needs the Reservasi app on)
+- `list_rentals` (Sewa: `view` `open`, the default, lists every rental booked or out; `view` `range` with `from`/`to` up to 62 days lists those whose time touches the range. Each with its pickup and return times, `state` (`booked`, `out`, `returned`), late or not picked up, `amount_due` including its charges, the jaminan and the renter under `buyer`; `counts` for today. Needs the Sewa app on)
 - `get_tax_report`, `get_commission_report`, `get_profit_report` (laba-rugi)
 - `list_expenses`
 - `get_loyalty_settings` (owner only)
@@ -113,7 +114,7 @@ Write:
 - `create_category`, `update_category`
 - `delete_category` (destructive)
 - `ship_order` (needs the AWB), `update_awb`, `complete_order`
-- `create_pay_link` (a bill with a pay link, optionally a DP, a ready time, the buyer's email and a note per item; needs the Link bayar app on)
+- `create_pay_link` (a bill with a pay link, optionally a DP, a ready time, the buyer's email and a note per item; for a rental product, `rental_from` and `rental_to` together price it for that period and book the unit; needs the Link bayar app on, and the Sewa app for rentals)
 - `cancel_order` (destructive; only orders still awaiting payment, and never a link order whose DP is paid)
 - `create_promotion`, `update_promotion`, `restore_promotion`, `reorder_promotions`
 - `archive_promotion` (destructive)
@@ -122,7 +123,7 @@ Write:
 
 A variant's stock changes only through the stock route: `update_variant` with only a price, cost, SKU or weight leaves stock alone, so a sale made in between stays sold. Pass `expected_stock` with a stock change to have it refused (`stock_changed`) when the stock moved since the agent read it.
 
-An agent can never reach payment settings and methods, payment confirmation, balance withdrawals, bank and payout accounts, the shop's own payment gateway account, staff, domains, billing and plan, the page builder, or images. The counter's own work stays in the dashboard and the Kasir too: devices and pairing, PINs, shifts and the cash drawer, ringing up a sale, the kitchen and tables, outlets, which apps run, the points programme's settings, crew, stock counts (including the morning count of daily stock), voiding an order, and the catalogue's order. An expense can be recorded and paid, but changing one once recorded (editing, deleting, restoring, undoing a payment) stays in Keuangan.
+An agent can never reach payment settings and methods, payment confirmation, balance withdrawals, bank and payout accounts, the shop's own payment gateway account, staff, domains, billing and plan, the page builder, or images. The counter's own work stays in the dashboard and the Kasir too: devices and pairing, PINs, shifts and the cash drawer, ringing up a sale, the kitchen and tables, outlets, which apps run, the points programme's settings, crew, stock counts (including the morning count of daily stock), voiding an order, and the catalogue's order. Sewa's counter steps (handing over, extending, taking back) and its late-fee rule stay in the Kasir and the dashboard, and so does turning a product into a rental, because that also sets where it is sold. An expense can be recorded and paid, but changing one once recorded (editing, deleting, restoring, undoing a payment) stays in Keuangan.
 
 ## Rules for agents
 
