@@ -98,7 +98,7 @@ Read:
 - `list_promotions`
 - `list_outlets` (each with its `time_zone`, such as `Asia/Makassar`, and `time_zone_label`, such as `WITA`, its opening hours, apps and its own holiday), `get_stock` (per outlet), `get_stock_history`, `list_transfers`
 - `list_reservations` (one day, or `from`/`to` up to 31 days; needs the Reservasi app on)
-- `list_rentals` (Sewa: `view` `open`, the default, lists every rental booked or out; `view` `range` with `from`/`to` up to 62 days lists those whose time touches the range. Each with its pickup and return times, `state` (`booked`, `out`, `returned`), late or not picked up, `amount_due` including its charges, the jaminan and the renter under `buyer`; `counts` for today. Needs the Sewa app on)
+- `list_rentals` (Sewa: `view` `open`, the default, lists every rental booked or out; `view` `range` with `from`/`to` up to 62 days lists those whose time touches the range. Each with its pickup and return times, `state` (`booked`, `out`, `returned`), late or not picked up, `amount_due` including its charges and less any DP taken at the Kasir, the jaminan (with the cash held, `jaminan_held`) and the renter under `buyer`; `counts` for today, and the outlet's total cash jaminan held under `jaminan_held`. Needs the Sewa app on)
 - `get_tax_report`, `get_commission_report`, `get_profit_report` (laba-rugi)
 - `list_expenses`
 - `get_loyalty_settings` (owner only)
