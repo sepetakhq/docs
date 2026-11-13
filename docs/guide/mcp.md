@@ -93,12 +93,12 @@ Read:
 - `list_products`, `get_product` (stock is the online outlet's; search also matches product and variant codes; each product has its own `sku`; `get_product` also says `cost` (harga modal), `tax_exempt`, `tax_choice` and where the product is sold, `sell_on`, and its rental settings, `rental`: price rows by length in minutes, the buffer before it can go out again and the jaminan asked; `null` when it is not rented out)
 - `list_categories`
 - `list_orders`, `get_order` (each with the `outlet_id` it was sold at; `get_order` lists each tax under `taxes`, and only `tax_added` grew the total; a rental carries `rental`: its pickup and return times, when it was handed over and returned, its `state`, jaminan and extra `charges`; an extension, late fee or damage charge carries `rental_of`, the rental it belongs to)
-- `list_customers`, `get_customer`
+- `list_customers`, `get_customer` (with `blocked` and `blocked_note`: whether the shop blocks the customer from online rental booking)
 - `get_sales_summary`
 - `list_promotions`
 - `list_outlets` (each with its `time_zone`, such as `Asia/Makassar`, and `time_zone_label`, such as `WITA`, its opening hours, apps and its own holiday), `get_stock` (per outlet), `get_stock_history`, `list_transfers`
 - `list_reservations` (one day, or `from`/`to` up to 31 days; needs the Reservasi app on)
-- `list_rentals` (Sewa: `view` `open`, the default, lists every rental booked or out; `view` `range` with `from`/`to` up to 62 days lists those whose time touches the range. Each with its pickup and return times, `state` (`booked`, `out`, `returned`), late or not picked up, `amount_due` including its charges and less any DP taken at the Kasir, the jaminan (with the cash held, `jaminan_held`) and the renter under `buyer`; `counts` for today, and the outlet's total cash jaminan held under `jaminan_held`. Needs the Sewa app on)
+- `list_rentals` (Sewa: `view` `open`, the default, lists every rental booked or out; `view` `range` with `from`/`to` up to 62 days lists those whose time touches the range. Each with its pickup and return times, `state` (`booked`, `out`, `returned`), late or not picked up, `amount_due` including its charges and less any DP taken at the Kasir, the jaminan (with the cash held, `jaminan_held`) and the renter under `buyer`; `counts` for today, and the outlet's total cash jaminan held under `jaminan_held`. A rental booked from the shop's online booking page has `online` true; `requested` true is a request waiting for the shop to accept or decline it, until `answer_by`. Accepting and declining happen at the Kasir. Needs the Sewa app on)
 - `get_tax_report`, `get_commission_report`, `get_profit_report` (laba-rugi)
 - `list_expenses`
 - `get_loyalty_settings` (owner only)
@@ -118,7 +118,7 @@ Write:
 - `cancel_order` (destructive; only orders still awaiting payment, and never a link order whose DP is paid)
 - `create_promotion`, `update_promotion`, `restore_promotion`, `reorder_promotions`
 - `archive_promotion` (destructive)
-- `update_customer` (the name only)
+- `update_customer` (the name, and/or `blocked` with an optional `blocked_note` up to 200 characters: a blocked customer can't book rentals online but is still served at the Kasir; phone and email can't be changed)
 - `set_announcement`
 
 A variant's stock changes only through the stock route: `update_variant` with only a price, cost, SKU or weight leaves stock alone, so a sale made in between stays sold. Pass `expected_stock` with a stock change to have it refused (`stock_changed`) when the stock moved since the agent read it.
