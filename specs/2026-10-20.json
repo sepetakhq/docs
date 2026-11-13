@@ -86,7 +86,8 @@
       "orders carry fulfilment",
       "products and lines carry a unit",
       "storefront config says whether to show the Sepetak badge",
-      "storefront config names the shop's time zone"
+      "storefront config names the shop's time zone",
+      "storefront config words the rentals section"
     ],
     "x-versions": [
       "2026-09-05",
@@ -2678,6 +2679,12 @@
                             "related_heading": {
                               "type": "string"
                             },
+                            "rental_button": {
+                              "type": "string"
+                            },
+                            "rentals_title": {
+                              "type": "string"
+                            },
                             "story_cta": {
                               "type": "string"
                             },
@@ -3655,6 +3662,87 @@
           }
         },
         "summary": "Page by key",
+        "tags": [
+          "Storefront"
+        ]
+      }
+    },
+    "/storefront/rentals": {
+      "get": {
+        "description": "Products renters can book online, each linking to the shop's booking page. An empty items list means the shop shows no rental section.",
+        "operationId": "getStorefrontRentals",
+        "parameters": [
+          {
+            "description": "The API date this client was written against. Absent means the baseline.",
+            "in": "header",
+            "name": "X-API-Version",
+            "required": false,
+            "schema": {
+              "example": "2026-10-20",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "book_url": {
+                      "type": "string"
+                    },
+                    "items": {
+                      "items": {
+                        "properties": {
+                          "book_url": {
+                            "type": "string"
+                          },
+                          "from_label": {
+                            "type": "string"
+                          },
+                          "from_price": {
+                            "type": "integer"
+                          },
+                          "image": {
+                            "type": "string"
+                          },
+                          "image_height": {
+                            "type": "integer"
+                          },
+                          "image_srcset": {
+                            "type": "string"
+                          },
+                          "image_width": {
+                            "type": "integer"
+                          },
+                          "name": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error envelope."
+          }
+        },
+        "summary": "Rentals",
         "tags": [
           "Storefront"
         ]
