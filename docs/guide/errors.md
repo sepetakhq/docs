@@ -65,6 +65,7 @@ Every error is `{ "error": { "code", "message", "details" } }`. Branch on the st
 | `409 payment_in_progress`                                                        | `/orders/track/{token}/payment`       | Instructions are still being created. Wait, then reload.                 |
 | `409 method_unavailable`, `409 payment_window_closing`                           | `/orders/track/{token}/payment`       | A new charge cannot open. Show `message`; the buyer contacts the seller. |
 | `422 unprocessable`                                                              | `/orders/track/{token}/payment`       | The total is outside what the method accepts. Show `message`.            |
+| `422 payment_refused`                                                            | `/orders/track/{token}/payment`       | The provider refused this charge. Show `message`; do not retry.          |
 | `503 unavailable`                                                                | `/orders/track/{token}/payment`       | The payment provider is down. Offer a retry.                             |
 | `409 conflict`                                                                   | `/orders/track/{token}/payment/claim` | The order is not manual or no longer awaits payment. Reload it.          |
 
